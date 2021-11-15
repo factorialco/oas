@@ -1,0 +1,2820 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.1",
+    "title": "Factorial API",
+    "description": "Factorial HR Public API documentation",
+    "termsOfService": "https://factorialhr.es/en/tos_company",
+    "contact": {
+      "name": "Factorial Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.factorialhr.com/api/v1",
+      "description": "Factorial API"
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": [
+        "read",
+        "write"
+      ]
+    }
+  ],
+  "paths": {
+    "/me": {
+      "get": {
+        "summary": "Get information about current user",
+        "description": "After token grant, get information of the token holder",
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "Information on current user response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "string"
+                    },
+                    "full_name": {
+                      "type": "string",
+                      "format": "string"
+                    },
+                    "first_name": {
+                      "type": "string",
+                      "format": "string"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "format": "string"
+                    },
+                    "employee_id": {
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "role": {
+                      "type": "string",
+                      "format": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees": {
+      "get": {
+        "summary": "Get employees from a company",
+        "description": "Get employees from a company",
+        "operationId": "findEmployees",
+        "responses": {
+          "200": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create employee",
+        "description": "Create employee",
+        "operationId": "createEmployee",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Employee",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees/{id}": {
+      "get": {
+        "summary": "Get employee",
+        "description": "Get employee",
+        "operationId": "getEmployee",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update employee",
+        "description": "Update employee",
+        "operationId": "updateEmployee",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees/{id}/terminate": {
+      "post": {
+        "summary": "Terminate employee",
+        "description": "Terminate employee",
+        "operationId": "terminateEmployee",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Employee",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employees/{id}/unterminate": {
+      "post": {
+        "summary": "Unterminate employee",
+        "description": "Unterminate employee",
+        "operationId": "unterminateEmployee",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leave_types": {
+      "get": {
+        "summary": "Get leave types from a company",
+        "description": "Get leave types from a company",
+        "operationId": "findLeaveTypes",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "LeaveType response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeaveType"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create leave type",
+        "description": "Create leave type",
+        "operationId": "createLeaveType",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveTypeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "LeaveType response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveType"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leave_types/{id}": {
+      "put": {
+        "summary": "Update leave type",
+        "description": "Update leave type",
+        "operationId": "updateLeaveType",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveTypeUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "LeaveType response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaveType"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leaves": {
+      "get": {
+        "summary": "Get leaves from a company",
+        "description": "Get leaves from a company",
+        "operationId": "findLeaves",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Leave response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Leave"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create leave",
+        "description": "Create leave",
+        "operationId": "createLeave",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Leave response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Leave"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leaves/{id}": {
+      "put": {
+        "summary": "Update leave",
+        "description": "Update leave",
+        "operationId": "updateLeave",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LeaveUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Leave response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Leave"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete leave",
+        "description": "Delete leave",
+        "operationId": "deleteLeave",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payslips": {
+      "get": {
+        "summary": "Get payslips from a company",
+        "description": "Get payslips from a company",
+        "operationId": "finsPayslips",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/FromInput"
+            }
+          }
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payslip response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Payslip"
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "This company doesn't have payroll enabled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts": {
+      "get": {
+        "summary": "Get shifts from a company",
+        "description": "Get shifts from a company. Admin users will get shifts from all employees.",
+        "operationId": "findShifts",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Shift response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Shift"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts/clock_in": {
+      "post": {
+        "summary": "Clock in",
+        "description": "Creates a shift for the current user with the clock_in time of the request and nil clock_out",
+        "operationId": "clockIn",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "now",
+                  "employee_id"
+                ],
+                "properties": {
+                  "now": {
+                    "type": "string",
+                    "example": "2019-01-01T12:12:01-02:00",
+                    "description": "Date and time in ISO8601 format"
+                  },
+                  "employee_id": {
+                    "type": "integer",
+                    "example": "1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shift response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts/clock_out": {
+      "post": {
+        "summary": "Clock out",
+        "description": "Updates a shift for the current user with the clock_out time of the request. It will fail if the user wasn't previously clocked in.",
+        "operationId": "clockOut",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "now",
+                  "employee_id"
+                ],
+                "properties": {
+                  "now": {
+                    "type": "string",
+                    "example": "2019-01-01T12:12:01-02:00",
+                    "description": "Date and time in ISO8601 format"
+                  },
+                  "employee_id": {
+                    "type": "integer",
+                    "example": "1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shift response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shifts/{id}": {
+      "put": {
+        "summary": "Update shift",
+        "description": "Update shift",
+        "operationId": "updateShift",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShiftInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shift response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Shift"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete shift",
+        "description": "Delete shift",
+        "operationId": "deleteShift",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "summary": "Get list of Webhooks",
+        "description": "Get a list of all subscribed webhooks for current user.",
+        "operationId": "getWebhooks",
+        "security": [
+          {
+            "OAuth2": [
+              "read"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhooks response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WebhooksSubscription"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Webhook",
+        "description": "Creates a subscription for a determined webhook type. If webhook already exists, it just changes the target_url.",
+        "operationId": "createWebhook",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "type",
+                  "target_url"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "employee_invited",
+                    "description": "Type of subscription you want to subscribe. See schema for possible values.",
+                    "enum": [
+                      "employee_invited",
+                      "employee_terminated",
+                      "employee_unterminated",
+                      "employee_created",
+                      "attendance_clockin",
+                      "attendance_clockout"
+                    ]
+                  },
+                  "target_url": {
+                    "type": "string",
+                    "example": "https://yourcoolcompany.com/my_webhook_subscription",
+                    "description": "Url where we will point with a POST request when the action subscribed is triggered."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhooksSubscription"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Webhook",
+        "description": "Deletes a subscription to a webhook. We won't need the webhook id, but its `type`",
+        "operationId": "deleteWebhook",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "employee_invited",
+                    "description": "Type of subscription you want to delete."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhooksSubscription"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations": {
+      "get": {
+        "summary": "Get all locations",
+        "description": "Get all locations",
+        "operationId": "getLocations",
+        "responses": {
+          "200": {
+            "description": "Locations response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Location"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations/{id}": {
+      "get": {
+        "summary": "Get location by ID",
+        "description": "Get location by ID",
+        "operationId": "getLocationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Location response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teams": {
+      "get": {
+        "summary": "Get all teams",
+        "description": "Get all teams",
+        "operationId": "getTeams",
+        "responses": {
+          "200": {
+            "description": "Teams response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/teams/{id}": {
+      "get": {
+        "summary": "Get team by ID",
+        "description": "Get team by ID",
+        "operationId": "getTeamById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company_holidays": {
+      "get": {
+        "summary": "Get all company holidays",
+        "description": "Get all company holidays",
+        "operationId": "getCompanyHolidays",
+        "responses": {
+          "200": {
+            "description": "CompanyHolidays response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompanyHoliday"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company_holidays/{id}": {
+      "get": {
+        "summary": "Get company holiday by ID",
+        "description": "Get company holiday by ID",
+        "operationId": "getCompanyHolidayById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CompanyHoliday response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyHoliday"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents": {
+      "get": {
+        "summary": "Get a collection of documents",
+        "description": "Get a collection of documents",
+        "operationId": "findDocuments",
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "query",
+            "description": "Filter all documents by the employee_id",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "folder_id",
+            "in": "query",
+            "description": "Filter all documents by folder_id",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of documents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Document"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a document",
+        "description": "Create a document",
+        "operationId": "createDocument",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Document",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "get": {
+        "summary": "Fetch a document",
+        "description": "Fetch a document",
+        "operationId": "fetchDocument",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the document to fetch",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "documents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a document",
+        "summary": "Update a document",
+        "operationId": "updateDocument",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Document",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentInputUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a document",
+        "description": "Delete a document",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/folders": {
+      "get": {
+        "summary": "Get a collection of folders",
+        "description": "Get a collection of folders",
+        "operationId": "findFolders",
+        "parameters": [
+          {
+            "name": "name",
+            "description": "filter folders by name",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "in": "query"
+          },
+          {
+            "name": "active",
+            "description": "filter folders by active",
+            "schema": {
+              "format": "boolean",
+              "type": "boolean",
+              "enum": [
+                "true",
+                "false"
+              ]
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of folders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Folder"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a folder",
+        "description": "Create a folder",
+        "operationId": "createFolder",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "requestBody": {
+          "description": "Folder",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created folder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folders/{id}": {
+      "get": {
+        "summary": "Fetch a folder",
+        "description": "Fetch a folder",
+        "operationId": "fetchFolder",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The folder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a folder",
+        "description": "Update a folder",
+        "operationId": "updateFolder",
+        "security": [
+          {
+            "OAuth2": [
+              "write"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Folder",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated folder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Folder"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom_fields": {
+      "get": {
+        "summary": "Get a collection of custom fields.\n          Custom fields are fields attached to a specific model,\n          and this fields have individual values for each instance of the model",
+        "description": "Get a collection of custom fields.\n          Custom fields are fields attached to a specific model,\n          and this fields have individual values for each instance of the model",
+        "operationId": "findCustomFields",
+        "parameters": [
+          {
+            "name": "field_group",
+            "description": "Available options: <br />employees-questions (Employee's fields)<br />time-tracking-projects (Shift's project)",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of custom fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomField"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom_fields/values": {
+      "get": {
+        "summary": "Given a custom field, get the value for a specific instance.",
+        "description": "Given a custom field, get the value for a specific instance.",
+        "operationId": "findCustomValue",
+        "parameters": [
+          {
+            "name": "field_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "in": "query"
+          },
+          {
+            "name": "instance_id",
+            "description": "Id of the model instance associated to the field <br />E.g Employee ID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomValue"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a value to a custom field",
+        "description": "Add a value to a custom field",
+        "operationId": "createCustomValue",
+        "parameters": [
+          {
+            "name": "field_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "in": "query"
+          },
+          {
+            "name": "instance_id",
+            "description": "Id of the model instance associated to the field <br />E.g Employee ID",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomValue"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Employee": {
+        "required": [
+          "email",
+          "first_name",
+          "last_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "birthday_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "regular_access_starts_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "email": {
+            "type": "string",
+            "format": "string"
+          },
+          "full_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "first_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "last_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "manager_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string",
+            "format": "string"
+          },
+          "timeoff_manager_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "terminated_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "phone_number": {
+            "type": "string",
+            "format": "string"
+          },
+          "gender": {
+            "type": "string",
+            "format": "string"
+          },
+          "nationality": {
+            "type": "string",
+            "format": "string"
+          },
+          "bank_number": {
+            "type": "string",
+            "format": "string"
+          },
+          "country": {
+            "type": "string",
+            "format": "string"
+          },
+          "city": {
+            "type": "string",
+            "format": "string"
+          },
+          "state": {
+            "type": "string",
+            "format": "string"
+          },
+          "postal_code": {
+            "type": "string",
+            "format": "string"
+          },
+          "address_line_1": {
+            "type": "string",
+            "format": "string"
+          },
+          "address_line_2": {
+            "type": "string",
+            "format": "string"
+          },
+          "social_security_number": {
+            "type": "string",
+            "format": "string"
+          },
+          "company_holidays_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "identifier": {
+            "type": "string",
+            "format": "string",
+            "description": "National identification number"
+          },
+          "identifier_type": {
+            "type": "string",
+            "format": "string",
+            "description": "Type of national identification. Possible value: DNI, NIE, Passport"
+          },
+          "hiring": {
+            "type": "object",
+            "properties": {
+              "base_compensation_amount_in_cents": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "base_compensation_type": {
+                "type": "string",
+                "format": "string",
+                "description": "Compensation recurrence. Possible values: hourly, monthly, yearly."
+              }
+            }
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "team_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "EmployeeInput": {
+        "required": [
+          "email",
+          "first_name",
+          "last_name"
+        ],
+        "properties": {
+          "birthday_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "default": "today",
+            "deprecated": true
+          },
+          "regular_access_starts_on": {
+            "description": "The date as of wich the employee has full access to Factorial. Must be >= today. This is related to Welcome Space.",
+            "type": "string",
+            "format": "date",
+            "default": "YYYY-MM-DD"
+          },
+          "email": {
+            "type": "string",
+            "format": "string"
+          },
+          "first_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "last_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "manager_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string",
+            "format": "string",
+            "enum": [
+              "admin",
+              "basic"
+            ]
+          },
+          "timeoff_manager_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "terminated_on": {
+            "type": "string",
+            "format": "date",
+            "deprecated": true
+          },
+          "termination_reason": {
+            "type": "string",
+            "format": "string",
+            "deprecated": true
+          }
+        }
+      },
+      "EmployeeUpdateInput": {
+        "properties": {
+          "birthday_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "first_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "last_name": {
+            "type": "string",
+            "format": "string"
+          },
+          "manager_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "role": {
+            "type": "string",
+            "format": "string",
+            "enum": [
+              "admin",
+              "basic"
+            ]
+          },
+          "timeoff_manager_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "TerminationInput": {
+        "properties": {
+          "terminated_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "termination_reason": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "LeaveType": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "accrues": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accrue holidays"
+          },
+          "active": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": true,
+            "description": "Whether leaves whit this type can be created"
+          },
+          "approval_required": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type require approval from timeoff managers"
+          },
+          "attachment": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accept attachments"
+          },
+          "color": {
+            "type": "string",
+            "format": "string",
+            "example": "FFFFFF",
+            "description": "Identifying color of this leave type"
+          },
+          "identifier": {
+            "type": "string",
+            "format": "string",
+            "description": "Slug identifying the type of leave type. Only \"custom\" leave types can be created or modified via the API"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "visibility": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether this leave type is visibile to regular employees"
+          },
+          "workable": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type count as working days"
+          }
+        }
+      },
+      "LeaveTypeUpdateInput": {
+        "properties": {
+          "accrues": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accrue holidays"
+          },
+          "active": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": true,
+            "description": "Whether leaves whit this type can be created"
+          },
+          "approval_required": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type require approvel from timeoff managers"
+          },
+          "attachment": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accept attachments"
+          },
+          "color": {
+            "type": "string",
+            "format": "string",
+            "example": "FFFFFF",
+            "description": "Identifying color of this leave type"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "visibility": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether this leave type is visibile to regular employees"
+          },
+          "workable": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type count as working days"
+          }
+        }
+      },
+      "LeaveTypeInput": {
+        "required": [
+          "name",
+          "color"
+        ],
+        "properties": {
+          "accrues": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accrue holidays"
+          },
+          "active": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": true,
+            "description": "Whether leaves whit this type can be created"
+          },
+          "approval_required": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type require approvel from timeoff managers"
+          },
+          "attachment": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type accept attachments"
+          },
+          "color": {
+            "type": "string",
+            "format": "string",
+            "example": "FFFFFF",
+            "description": "Identifying color of this leave type"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "visibility": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether this leave type is visibile to regular employees"
+          },
+          "workable": {
+            "type": "boolean",
+            "format": "boolean",
+            "default": false,
+            "description": "Whether leaves with this type count as working days"
+          }
+        }
+      },
+      "Leave": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": {
+            "type": "string",
+            "format": "string"
+          },
+          "employee_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "finish_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "half_day": {
+            "type": "string",
+            "format": "string"
+          },
+          "leave_type_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "start_on": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "LeaveInput": {
+        "required": [
+          "start_on",
+          "finish_on",
+          "employee_id",
+          "leave_type_id"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "format": "string"
+          },
+          "employee_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "finish_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "half_day": {
+            "type": "string",
+            "format": "string"
+          },
+          "leave_type_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "start_on": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "LeaveUpdateInput": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "format": "string"
+          },
+          "employee_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "finish_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "half_day": {
+            "type": "string",
+            "format": "string"
+          },
+          "leave_type_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "start_on": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Payslip": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "base_cotization_in_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "base_irpf_in_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "gross_salary_in_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "net_salary_in_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "irpf_in_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "irpf_percentage": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "is_last_payslip": {
+            "type": "boolean"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "employee_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "FromInput": {
+        "required": [
+          "month",
+          "year"
+        ],
+        "properties": {
+          "month": {
+            "type": "integer"
+          },
+          "year": {
+            "type": "integer"
+          }
+        }
+      },
+      "Shift": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "day": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "clock_in": {
+            "type": "string",
+            "format": "string",
+            "example": "09:00"
+          },
+          "clock_out": {
+            "type": "string",
+            "format": "string",
+            "example": "17:00"
+          },
+          "employee_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "observations": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "ShiftInput": {
+        "properties": {
+          "clock_in": {
+            "type": "string",
+            "example": "2019-01-01T12:12:01-02:00",
+            "description": "Date and time in ISO8601 format"
+          },
+          "clock_out": {
+            "type": "string",
+            "example": "2019-01-01T12:12:01-02:00",
+            "description": "Date and time in ISO8601 format"
+          },
+          "observations": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "WebhooksSubscription": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "string",
+            "example": "employee_invited"
+          }
+        }
+      },
+      "Location": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "country": {
+            "type": "string",
+            "format": "string",
+            "description": "Country code. E.g. 'es'"
+          },
+          "phone_number": {
+            "type": "string",
+            "format": "string"
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "description": "State/province code. E.g. 'ct'"
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "description": "City name. E.g. 'barcelona'"
+          },
+          "address_line_1": {
+            "type": "string",
+            "format": "string"
+          },
+          "address_line_2": {
+            "type": "string",
+            "format": "string"
+          },
+          "postal_code": {
+            "type": "string",
+            "format": "string"
+          },
+          "company_holidays_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "Team": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "format": "string"
+          },
+          "employee_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "lead_ids": {
+            "type": "array",
+            "description": "Ids of team leads.",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "CompanyHoliday": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "summary": {
+            "type": "string",
+            "format": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "half_day": {
+            "type": "string",
+            "format": "string"
+          },
+          "location_id": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "Document": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "employee_id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "folder_id": {
+            "type": "integer"
+          },
+          "file": {
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "DocumentInput": {
+        "required": [
+          "public",
+          "file",
+          "filename"
+        ],
+        "properties": {
+          "public": {
+            "type": "boolean",
+            "description": "is the file public?"
+          },
+          "employee_id": {
+            "type": "integer",
+            "description": "assign document to an employee"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "the actual file"
+          },
+          "filename": {
+            "type": "string",
+            "description": "filename of the document"
+          },
+          "folder_id": {
+            "type": "integer",
+            "description": "folder to include the document in"
+          },
+          "request_esignature": {
+            "description": "request e-signature for this document",
+            "type": "boolean"
+          },
+          "signees": {
+            "type": "array",
+            "description": "array of access ids that have to sign the document (only valid if request_esignature is present)",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "DocumentInputUpdate": {
+        "required": [
+          "public"
+        ],
+        "properties": {
+          "public": {
+            "type": "boolean",
+            "description": "is the file public?"
+          },
+          "employee_id": {
+            "type": "integer",
+            "description": "assign document to an employee"
+          },
+          "folder_id": {
+            "type": "integer",
+            "description": "folder to include the document in"
+          },
+          "request_esignature": {
+            "description": "request e-signature for this document",
+            "type": "boolean"
+          },
+          "signees": {
+            "type": "array",
+            "description": "array of access ids that have to sign the document (only valid if request_esignature is present)",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Folder": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the folder"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of the folder, you can only create custom folders"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "FolderInput": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the folder"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Is the folder active?"
+          }
+        }
+      },
+      "CustomField": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "field_type": {
+            "type": "string"
+          },
+          "min_value": {
+            "type": "integer",
+            "description": "Just for rating type fields"
+          },
+          "max_value": {
+            "type": "integer",
+            "description": "Just for rating type fields"
+          },
+          "choice_options": {
+            "type": "array",
+            "description": "Just for choice type fields",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CustomValue": {
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "integer"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "instance_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "ErrorModel": {
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "examples": {},
+    "links": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.factorialhr.com/oauth/authorize",
+            "tokenUrl": "https://api.factorialhr.com/oauth/token",
+            "scopes": {
+              "read": "Grants read access",
+              "write": "Grants write access"
+            }
+          }
+        }
+      }
+    }
+  }
+}
