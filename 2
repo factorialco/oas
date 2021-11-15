@@ -1,0 +1,51 @@
+{
+    "openapi": "3.0.0",
+  "info": {
+    "version": "2",
+    "title": "Factorial API",
+    "description": "Factorial HR Public API documentation",
+    "termsOfService": "https://factorialhr.es/en/tos_company",
+    "contact": {
+      "name": "Factorial Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.factorialhr.com/api/v2",
+      "description": "Factorial API"
+    },
+    {
+      "url": "https://api.demo.factorialhr.com/api/v2",
+      "description": "Factorial API"
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": [
+        "read",
+        "write"
+      ]
+    }
+  ],
+  "paths": {},
+  "components": {
+      "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://api.factorialhr.com/oauth/authorize",
+            "tokenUrl": "https://api.factorialhr.com/oauth/token",
+            "scopes": {
+              "read": "Grants read access",
+              "write": "Grants write access"
+            }
+          }
+        }
+      }
+    }
+  }
+  }
