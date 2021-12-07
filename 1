@@ -1155,7 +1155,7 @@
         "/shifts": {
             "get": {
                 "tags": [
-                    "Shifts"
+                    "Attendance"
                 ],
                 "summary": "Get shifts from a company",
                 "description": "Get shifts from a company. `admin` users will get shifts from all employees. `regular users` will get a restricted version of the payload as a response based on the permission set by the admin",
@@ -1217,7 +1217,7 @@
         "/shifts/clock_in": {
             "post": {
                 "tags": [
-                    "Shifts"
+                    "Attendance"
                 ],
                 "summary": "Clock in",
                 "description": "Creates a shift for the current user with the clock_in time of the request and nil clock_out",
@@ -1280,7 +1280,7 @@
         "/shifts/clock_out": {
             "post": {
                 "tags": [
-                    "Shifts"
+                    "Attendance"
                 ],
                 "summary": "Clock out",
                 "description": "Updates a shift for the current user with the clock_out time of the request. It will fail if the user wasn't previously clocked in.",
@@ -1343,7 +1343,7 @@
         "/shifts/{id}": {
             "put": {
                 "tags": [
-                    "Shifts"
+                    "Attendance"
                 ],
                 "summary": "Update shift",
                 "description": "Update shift",
