@@ -1442,7 +1442,7 @@
         "/webhooks": {
             "get": {
                 "tags": [
-                    "Instant Notification"
+                    "Webhooks"
                 ],
                 "summary": "Get list of Webhooks",
                 "description": "Get a list of all subscribed webhooks for current user.",
@@ -1482,7 +1482,7 @@
             },
             "post": {
                 "tags": [
-                    "Instant Notification"
+                    "Webhooks"
                 ],
                 "summary": "Create Webhook",
                 "description": "Creates a subscription for a determined webhook type. If webhook already exists, it just changes the target_url.",
@@ -1552,7 +1552,7 @@
             },
             "delete": {
                 "tags": [
-                    "Instant Notification"
+                    "Webhooks"
                 ],
                 "summary": "Delete Webhook",
                 "description": "Deletes a subscription to a webhook. We won't need the webhook id, but its `type`",
