@@ -284,11 +284,11 @@
                                     "$ref": "#/components/schemas/ErrorModel"
                                 },
                                 "examples": {
-                                   "Array String": {
+                                    "Array String": {
                                         "value": {
-                                           "errors":[
-                                               "Forbidden access to a paid resource"
-                                           ]
+                                            "errors": [
+                                                "Forbidden access to a paid resource"
+                                            ]
                                         }
                                     },
                                     "String": {
@@ -1260,6 +1260,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Shift"
+                                },
+                                "example": {
+                                    "id": 3,
+                                    "day": 7,
+                                    "month": 12,
+                                    "year": 2021,
+                                    "clock_in": "08:00",
+                                    "clock_out": null,
+                                    "employee_id": 5,
+                                    "observations": null
                                 }
                             }
                         }
