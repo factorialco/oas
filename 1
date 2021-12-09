@@ -1335,7 +1335,7 @@
                                     "$ref": "#/components/schemas/Shift"
                                 },
                                 "example": {
-                                   "id": 5,
+                                    "id": 5,
                                     "day": 9,
                                     "month": 12,
                                     "year": 2021,
@@ -1383,7 +1383,7 @@
                         "schema": {
                             "type": "integer"
                         },
-                        "example":13
+                        "example": 13
                     }
                 ],
                 "requestBody": {
@@ -1394,9 +1394,9 @@
                                 "$ref": "#/components/schemas/ShiftInput"
                             },
                             "example": {
-                                  "clock_in": "12:30",
-                                  "clock_out": "14:00",
-                                  "observations": "Looks like it rained on him"
+                                "clock_in": "12:30",
+                                "clock_out": "14:00",
+                                "observations": "Looks like it rained on him"
                             }
                         }
                     }
@@ -1408,6 +1408,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Shift"
+                                },
+                                "example": {
+                                    "id": 13,
+                                    "day": 9,
+                                    "month": 12,
+                                    "year": 2021,
+                                    "clock_in": "12:30",
+                                    "clock_out": "14:00",
+                                    "employee_id": 5,
+                                    "observations": "Looks like it rained on him"
                                 }
                             }
                         }
