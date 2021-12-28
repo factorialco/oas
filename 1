@@ -1823,7 +1823,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "The created document",
+                        "description": "The created team",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1832,7 +1832,17 @@
                             }
                         }
                     }
-                }
+                },
+                 "default": {
+                        "description": "Exception",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorModel"
+                                }
+                            }
+                        }
+                    }
             }
         }
         },
@@ -1934,6 +1944,57 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Team"
+                                }
+                            }
+                        }
+                    }
+                },
+                 "default": {
+                        "description": "Exception",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorModel"
+                                }
+                            }
+                        }
+                    }
+            },
+            "delete": {
+                "tags": [
+                    "Teams"
+                ],
+                "summary": "Delete team",
+                "description": "Delete team",
+                "operationId": "deleteTeam",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Team response"
+                    },
+                    "default": {
+                        "description": "Exception",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorModel"
                                 }
                             }
                         }
@@ -3337,6 +3398,14 @@
                             "format": "int64"
                         }
                     }
+                }
+            },
+            "TeamInput": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "format": "string"
+                    },
                 }
             },
             "CompanyHoliday": {
