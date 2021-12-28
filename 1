@@ -1795,7 +1795,55 @@
                       }
                   }
               }
-          }
+          },
+          "post": {
+                "tags": [
+                    "Teams"
+                ],
+                "summary": "Create a team",
+                "description": "Create a team",
+                "operationId": "createTeam",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "requestBody": {
+                    "description": "Name",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeamInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The created team",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Team"
+                                }
+                            }
+                        }
+                    },
+                 "default": {
+                        "description": "Exception",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorModel"
+                                }
+                            }
+                        }
+                    }
+            }
+        }
       },
        "/teams/{id}": {
            "get": {
