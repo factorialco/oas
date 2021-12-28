@@ -1890,6 +1890,55 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Teams"
+                ],
+                "summary": "Update a team",
+                "description": "Update a team",
+                "operationId": "updateTeam",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Name",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TeamInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated team",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Team"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/company_holidays": {
