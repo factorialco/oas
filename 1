@@ -2660,7 +2660,7 @@
                   {
                       "name": "ids",
                       "schema": {
-                          "type": "Array",
+                          "type": "array",
                           "items": {
                               "type": "integer"
                           }
@@ -2671,7 +2671,10 @@
                   {
                       "name": "employee_ids",
                       "schema": {
-                          "type": "integer"
+                          "type": "array",
+                          "items": {
+                              "type": "integer"
+                          }
                       },
                       "required": false,
                       "in": "query"
@@ -2679,7 +2682,7 @@
                   {
                       "name": "date",
                       "schema": {
-                          "type": "date"
+                          "type": "string"
                       },
                       "required": false,
                       "in": "query"
@@ -2687,7 +2690,7 @@
                   {
                       "name": "ends_on_gt",
                       "schema": {
-                          "type": "date"
+                          "type": "string"
                       },
                       "required": false,
                       "in": "query"
@@ -2695,7 +2698,7 @@
                   {
                       "name": "ends_on_lteq",
                       "schema": {
-                          "type": "date"
+                          "type": "string"
                       },
                       "required": false,
                       "in": "query"
@@ -2703,7 +2706,7 @@
                   {
                       "name": "starts_on_lteq",
                       "schema": {
-                          "type": "date"
+                          "type": "string"
                       },
                       "required": false,
                       "in": "query"
@@ -2732,7 +2735,7 @@
                       }
                   }
               }
-          },
+          }
       }
   },
   "components": {
@@ -3713,6 +3716,112 @@
                       "type": "boolean"
                   },
                   "instance_id": {
+                      "type": "integer"
+                  }
+              }
+          },
+          "ContractVersions": {
+              "properties": {
+                  "id": {
+                      "type": "integer"
+                  },
+                  "employee_id": {
+                      "type": "integer"
+                  },
+                  "country": {
+                      "type": "string"
+                  },
+                  "job_title": {
+                      "type": "string"
+                  },
+                  "starts_on": {
+                      "type": "string"
+                  },
+                  "ends_on": {
+                      "type": "string"
+                  },
+                  "effective_on": {
+                      "type": "string"
+                  },
+                  "has_payroll": {
+                      "type": "boolean"
+                  },
+                  "salary_amount": {
+                      "type": "integer"
+                  },
+                  "salary_frequency": {
+                      "type": "string"
+                  },
+                  "working_week_days": {
+                      "type": "string"
+                  },
+                  "working_hours": {
+                      "type": "integer"
+                  },
+                  "working_hours_frequency": {
+                      "type": "string"
+                  },
+                  "created_at": {
+                      "type": "string"
+                  },
+                  "updated_at": {
+                      "type": "string"
+                  },
+                  "es_has_teleworking_contract": {
+                      "type": "boolean"
+                  },
+                  "es_cotization_group": {
+                      "type": "integer"
+                  },
+                  "es_contract_observations": {
+                      "type": "string"
+                  },
+                  "es_job_description": {
+                      "type": "string"
+                  },
+                  "es_trial_period_ends_on": {
+                      "type": "string"
+                  },
+                  "es_contract_type_id": {
+                      "type": "integer"
+                  },
+                  "es_working_day_type_id": {
+                      "type": "integer"
+                  },
+                  "es_education_level_id": {
+                      "type": "integer"
+                  },
+                  "es_professional_category_id": {
+                      "type": "integer"
+                  },
+                  "fr_employee_type": {
+                      "type": "string"
+                  },
+                  "fr_forfait_jours": {
+                      "type": "boolean"
+                  },
+                  "fr_jours_par_an": {
+                      "type": "integer"
+                  },
+                  "fr_coefficient": {
+                      "type": "string"
+                  },
+                  "fr_contract_type_id": {
+                      "type": "integer"
+                  },
+                  "fr_level_id": {
+                      "type": "integer"
+                  },
+                  "fr_step_id": {
+                      "type": "integer"
+                  },
+                  "fr_mutual_id": {
+                      "type": "integer"
+                  },
+                  "fr_professional_category_id": {
+                      "type": "integer"
+                  },
+                  "fr_work_type_id": {
                       "type": "integer"
                   }
               }
