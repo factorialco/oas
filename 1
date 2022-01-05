@@ -2647,6 +2647,64 @@
                   }
               }
           }
+      },
+      "/contract_versions": {
+          "get": {
+              "tags": [
+                  "Contract"
+              ],
+              "summary": "Get contract versions",
+              "description": "Get contract versions by different filters",
+              "operationId": "getContractVersions",
+              "parameters": [
+                  const :ids, T.nilable(T::Array[Integer])
+        const :employee_ids, T.nilable(T::Array[Integer])
+        const :date, T.nilable(Date)
+        const :ends_on_gt, T.nilable(Date)
+        const :ends_on_lteq, T.nilable(Date)
+        const :starts_on_lteq, T.nilable(Date)
+        const :forfait_jours, T::Boolean, default: false
+                  {
+                      "name": "ids",
+                      "schema": {
+                          "type": "Integer"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "employee_ids",
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "date",
+                      "schema": {
+                          "type": "date"
+                      },
+                      "required": false,
+                      "in": "query"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Contract Versions",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "array",
+                                  "items": {
+                                      "$ref": "#/components/schemas/ContractVersions"
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          },
       }
   },
   "components": {
