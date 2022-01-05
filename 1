@@ -2651,7 +2651,7 @@
       "/contract_versions": {
           "get": {
               "tags": [
-                  "Contract"
+                  "ContractVersions"
               ],
               "summary": "Get contract versions",
               "description": "Get contract versions by different filters",
@@ -2735,8 +2735,56 @@
                       }
                   }
               }
-          }
-      }
+          },
+            "post": {
+              "tags": [
+                  "ContractVersions"
+              ],
+              "summary": "Create a contract version",
+              "description": "Create a contract version",
+              "operationId": "createContractVersion",
+              "security": [
+                  {
+                      "OAuth2": [
+                          "write"
+                      ]
+                  }
+              ],
+              "requestBody": {
+                  "description": "Contract Version",
+                  "required": true,
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/ContractVersionsInput"
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "201": {
+                      "description": "The created contract version",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/ContractVersions"
+                              }
+                          }
+                      }
+                  },
+                "default": {
+                    "description": "An Exception. The exception is returned with one of the HTTP Status Code",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ErrorModel"
+                            }
+                        }   
+                    }
+                }
+            }
+        }
+    }
   },
   "components": {
       "schemas": {
