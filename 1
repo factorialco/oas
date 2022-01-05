@@ -2657,17 +2657,13 @@
               "description": "Get contract versions by different filters",
               "operationId": "getContractVersions",
               "parameters": [
-                  const :ids, T.nilable(T::Array[Integer])
-        const :employee_ids, T.nilable(T::Array[Integer])
-        const :date, T.nilable(Date)
-        const :ends_on_gt, T.nilable(Date)
-        const :ends_on_lteq, T.nilable(Date)
-        const :starts_on_lteq, T.nilable(Date)
-        const :forfait_jours, T::Boolean, default: false
                   {
                       "name": "ids",
                       "schema": {
-                          "type": "Integer"
+                          "type": "Array",
+                          "items": {
+                              "type": "integer"
+                          }
                       },
                       "required": false,
                       "in": "query"
@@ -2684,6 +2680,38 @@
                       "name": "date",
                       "schema": {
                           "type": "date"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "ends_on_gt",
+                      "schema": {
+                          "type": "date"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "ends_on_lteq",
+                      "schema": {
+                          "type": "date"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "starts_on_lteq",
+                      "schema": {
+                          "type": "date"
+                      },
+                      "required": false,
+                      "in": "query"
+                  },
+                  {
+                      "name": "forfait_jours",
+                      "schema": {
+                          "type": "boolean"
                       },
                       "required": false,
                       "in": "query"
