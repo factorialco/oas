@@ -3874,6 +3874,19 @@
                   }
               }
           },
+          "ContractVersionsInput": {
+               "required": [
+                  "employee_id",
+                  "effective_on"
+              ],
+              "properties": {
+                  "employee_id": {
+                      "type": "integer",
+                      "format": "integer",
+                      "description": "Id to whom you want to create a contract version"
+                  }
+              }
+          },
           "ErrorModel": {
               "properties": {
                   "errors": {
