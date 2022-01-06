@@ -2784,6 +2784,39 @@
                 }
             }
         }
+    },
+     "/contract_versions/{id}": {
+          "get": {
+              "tags": [
+                  "ContractVersions"
+              ],
+              "summary": "Fetch a contract version",
+              "description": "Fetch a contract version",
+              "operationId": "fetchContractVersion",
+              "parameters": [
+                  {
+                      "name": "id",
+                      "in": "path",
+                      "required": true,
+                      "schema": {
+                          "type": "integer",
+                          "format": "int64"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "The Contract Version",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/ContractVersions"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
     }
   },
   "components": {
