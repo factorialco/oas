@@ -2816,6 +2816,46 @@
                       }
                   }
               }
+          },
+          "delete": {
+              "tags": [
+                  "ContractVersions"
+              ],
+              "summary": "Delete contract versions",
+              "description": "Delete contract versions",
+              "operationId": "deleteContractVersions",
+              "security": [
+                  {
+                      "OAuth2": [
+                          "write"
+                      ]
+                  }
+              ],
+              "parameters": [
+                  {
+                      "name": "id",
+                      "in": "path",
+                      "required": true,
+                      "schema": {
+                          "type": "integer"
+                      }
+                  }
+              ],
+              "responses": {
+                  "204": {
+                      "description": "No content"
+                  },
+                  "default": {
+                      "description": "Exception",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/ErrorModel"
+                              }
+                          }
+                      }
+                  }
+              }
           }
     }
   },
