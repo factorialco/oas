@@ -517,17 +517,19 @@
                 "deprecated": false
             }
         },
-        "/ats_candidates/{id}": {
+        "/{version}/ats_candidates/{id}": {
             "put": {
                 "tags": [
-                    "candidates"
+                    "Ats"
                 ],
                 "summary": "Update Ats Candidate",
+                "description": "Update ATS Candidates data",
+                "operationId": "UpdateAtsCandidate",
                 "parameters": [
                     {
                         "name": "talent_pool",
                         "in": "query",
-                        "description": "This candidate should be added to the talent pool(Required)",
+                        "description": "(Required) This candidate should be added to the talent pool(Required)",
                         "required": true,
                         "style": "form",
                         "explode": true,
@@ -537,15 +539,73 @@
                         }
                     },
                     {
+                        "name": "email",
+                        "in": "query",
+                        "description": "",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "example100@example.com"
+                        }
+                    },
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "description": "",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Chandler"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "description": "",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Bing"
+                        }
+                    },
+                    {
+                        "name": "consent_to_talent_pool",
+                        "in": "query",
+                        "description": "",
+                        "required": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "boolean",
+                            "example": true
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
-                        "description": "",
+                        "description": "(Required)",
                         "required": true,
                         "style": "simple",
                         "schema": {
                             "type": "integer",
                             "format": "int32",
-                            "example": 6
+                            "example": 30
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -569,9 +629,9 @@
                                     "text/plain": {
                                         "schema": {
                                             "type": "string",
-                                            "example": "Wed, 29 Dec 2021 07:35:32 GMT"
+                                            "example": "Fri, 07 Jan 2022 18:19:28 GMT"
                                         },
-                                        "example": "Wed, 29 Dec 2021 07:35:32 GMT"
+                                        "example": "Fri, 07 Jan 2022 18:19:28 GMT"
                                     }
                                 }
                             },
@@ -580,9 +640,9 @@
                                     "text/plain": {
                                         "schema": {
                                             "type": "string",
-                                            "example": "266"
+                                            "example": "234"
                                         },
-                                        "example": "266"
+                                        "example": "234"
                                     }
                                 }
                             },
@@ -613,9 +673,9 @@
                                     "text/plain": {
                                         "schema": {
                                             "type": "string",
-                                            "example": "W/\"41dbadf96c05c3d106d7aa91e47cc4a9\""
+                                            "example": "W/\"067d52ed4a0ddd2a6be9c2784dd85262\""
                                         },
-                                        "example": "W/\"41dbadf96c05c3d106d7aa91e47cc4a9\""
+                                        "example": "W/\"067d52ed4a0ddd2a6be9c2784dd85262\""
                                     }
                                 }
                             },
@@ -668,9 +728,9 @@
                                     "text/plain": {
                                         "schema": {
                                             "type": "string",
-                                            "example": "db3d11d0-a9a4-42b3-bf15-e7ed319e84ff"
+                                            "example": "77f604e8-3251-477d-9f5a-f74b731f2cd6"
                                         },
-                                        "example": "db3d11d0-a9a4-42b3-bf15-e7ed319e84ff"
+                                        "example": "77f604e8-3251-477d-9f5a-f74b731f2cd6"
                                     }
                                 }
                             },
@@ -679,9 +739,9 @@
                                     "text/plain": {
                                         "schema": {
                                             "type": "string",
-                                            "example": "81.555101"
+                                            "example": "0.212826"
                                         },
-                                        "example": "81.555101"
+                                        "example": "0.212826"
                                     }
                                 }
                             }
@@ -692,17 +752,15 @@
                                     "$ref": "#/components/schemas/UpdateAtsCandidate"
                                 },
                                 "example": {
-                                    "id": 3,
-                                    "photo": null,
-                                    "first_name": "Dami",
-                                    "last_name": "Olusakin",
-                                    "full_name": "Dami Olusakin",
-                                    "email": "example@email.com",
+                                    "id": 5,
+                                    "first_name": "Chandler",
+                                    "last_name": "Bing",
+                                    "full_name": "Chandler Bing",
+                                    "email": "example100@example.com",
                                     "application_count": 0,
                                     "talent_pool": false,
-                                    "created_at": "2021-12-28T13:17:58.000Z",
-                                    "updated_at": "2021-12-28T13:17:58.000Z",
-                                    "consent_given_at": null
+                                    "created_at": "2021-12-28T13:31:39.000Z",
+                                    "updated_at": "2022-01-07T18:19:28.000Z"
                                 }
                             }
                         }
