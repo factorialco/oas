@@ -3627,6 +3627,57 @@
                     }
                 }
             }
+        },
+        "/family_situation/{id}": {
+            "patch": {
+                "tags": [
+                    "FamilySituation"
+                ],
+                "summary": "Update a family situation",
+                "description": "Update a family situation",
+                "operationId": "UpdateFamilySituation",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "FamilySituation",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FamilySituationInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated family situation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FamilySituation"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
