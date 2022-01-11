@@ -3494,7 +3494,57 @@
                         }
                     }
                 }
+            },
+            "patch": {
+                "tags": [
+                    "ContractVersions"
+                ],
+                "summary": "Update a contract version",
+                "description": "Update a contract version",
+                "operationId": "UpdateContractVersion",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "ContractVersions",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractVersionsInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated contract version",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractVersions"
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
         }
     },
     "components": {
