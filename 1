@@ -3544,7 +3544,89 @@
                     }
                 }
             }
-
+        },
+        "/family_situation": {
+            "get": {
+                "tags": [
+                    "FamilySituation"
+                ],
+                "summary": "Get all family situations",
+                "description": "Get all family situations",
+                "operationId": "getFamilySituation",
+                "parameters": [
+                    {
+                        "name": "employee_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": false,
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Family Situations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/FamilySituation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ContractVersions"
+                ],
+                "summary": "Create a contract version",
+                "description": "Create a contract version",
+                "operationId": "createContractVersion",
+                "security": [
+                    {
+                        "OAuth2": [
+                            "write"
+                        ]
+                    }
+                ],
+                "requestBody": {
+                    "description": "Contract Version",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContractVersionsInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The created contract version",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractVersions"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "An Exception. The exception is returned with one of the HTTP Status Code",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorModel"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -4690,6 +4772,52 @@
                         "type": "string",
                         "format": "string",
                         "description": "Job title"
+                    }
+                }
+            },
+            "FamilySituation": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "Family Situation ID"
+                    },
+                    "employee_id": {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "Employee ID"
+                    },
+                    "civil_status": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Civil Status"
+                    },
+                    "number_of_dependants": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Number of Dependants"
+                    }
+                }
+            },
+            "FamilySituationInput": {
+                "required": [
+                    "employee_id"
+                ],
+                "properties": {
+                    "employee_id": {
+                        "type": "integer",
+                        "format": "integer",
+                        "description": "Employee ID"
+                    },
+                    "civil_status": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Civil Status"
+                    },
+                    "number_of_dependants": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "Number of Dependants"
                     }
                 }
             },
