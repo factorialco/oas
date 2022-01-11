@@ -3581,11 +3581,11 @@
             },
             "post": {
                 "tags": [
-                    "ContractVersions"
+                    "FamilySituation"
                 ],
-                "summary": "Create a contract version",
-                "description": "Create a contract version",
-                "operationId": "createContractVersion",
+                "summary": "Create a family situation for an employee",
+                "description": "Create a family situation for an employee",
+                "operationId": "createFamilySituation",
                 "security": [
                     {
                         "OAuth2": [
@@ -3594,23 +3594,23 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Contract Version",
+                    "description": "Family Situation",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContractVersionsInput"
+                                "$ref": "#/components/schemas/FamilySituationInput"
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "The created contract version",
+                        "description": "The created family situation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ContractVersions"
+                                    "$ref": "#/components/schemas/FamilySituation"
                                 }
                             }
                         }
