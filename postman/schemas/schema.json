@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.1",
-        "title": "Factorial API",
+        "title": "Factorial APIs",
         "description": "Factorial HR Public API documentation",
         "termsOfService": "https://factorialhr.es/en/tos_company",
         "contact": {
