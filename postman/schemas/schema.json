@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.1",
-        "title": "Factorial APIs",
+        "title": "Factorial API",
         "description": "Factorial HR Public API documentation",
         "termsOfService": "https://factorialhr.es/en/tos_company",
         "contact": {
@@ -5276,7 +5276,6 @@
                         "schema": {
                             "type": "string",
                             "format": "Date"
-                            
                         },
                         "required": false,
                         "in": "query"
@@ -5286,7 +5285,6 @@
                         "schema": {
                             "type": "string",
                             "format": "date"
-                            
                         },
                         "required": false,
                         "in": "query"
@@ -5296,7 +5294,6 @@
                         "schema": {
                             "type": "integer",
                             "format": "integer"
-                            
                         },
                         "required": false,
                         "in": "query"
@@ -5306,7 +5303,6 @@
                         "schema": {
                             "type": "boolean",
                             "format": "boolean"
-                            
                         },
                         "required": false,
                         "in": "query"
@@ -5316,7 +5312,6 @@
                         "schema": {
                             "type": "integer",
                             "format": "integer"
-                            
                         },
                         "required": false,
                         "in": "query"
