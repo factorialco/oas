@@ -1,0 +1,3866 @@
+openapi: 3.0.0
+info:
+  title: Factorial API
+  description: >-
+    Open Api Specifications available at
+    [https://github.com/factorialco/oas](https://github.com/factorialco/oasLooking)
+
+
+    Guides and support available at
+    [https://help.factorialhr.com/integrations](https://help.factorialhr.com/integrations)
+
+
+    # Authentication
+
+
+    The public API provides two methods of authentication, ApiKeys and OAuth2.
+    The following sections provide information regarding each one and their
+    intent.
+
+
+    ## OAuth2
+
+
+    > OAuth2 is used to identify individual users, not applicatins or platforms.
+
+
+    OAuth2 is available for authenticating to the public API and making requests
+    via third parties **on behalf of a user**. All actions are authored on
+    behalf of the user that creates the token. This means the intent is to be
+    used mainly to do submit actions the actual user is performing on an
+    alternative interface.
+
+
+    To generate a token you will require opening an authorization dialog that
+    returns a code, this code can then be exchanged for a token.
+
+
+    ### Configuration
+
+
+    In order to create an OAuth application, you must be an admin, head over to
+    your [personal repository of OAuth
+    applications](https://api.factorialhr.com/oauth/applications), click on `New
+    application` and follow the creation process.
+
+
+    The Factorial API enforces the same permissions at the user level than the
+    Factorial web application. This means that Factorial API users will only be
+    able to perform the same actions they are allowed to do in the Factorial
+    platform.
+
+
+    Next step will be to generate the Authorization Code you will need in order
+    to generate an OAuth2 Token.
+
+
+    ### OAuth2 Code Generation
+
+
+    Should be generated via browser by opening the following url. The user
+    should be already logged in to Factorial beforehand.
+
+
+    `https://api.factorialhr.com/oauth/authorize?client_id=&redirect_uri=&response_type=code&scope=`
+
+
+    YOUR_CLIENT_ID: OAuth2 Application Id  
+
+    REDIRECT_URI: OAuth2 Redirect URL
+
+
+    #### State Parameter
+
+
+    An optional query parameter called `state` can be added to the code
+    generation url. Any string can be used and will be sent on the callback url.
+
+
+    > Authorization protocols provide a `state` parameter that allows you to
+    restore the previous state of your application. The `state` parameter
+    preserves some state objects set by the client in the Authorization request
+    and makes it available to the client in the response.
+
+
+    ### OAuth2 Token Generation
+
+
+    Once you have the authorization code, you can request their access token to
+    Factorial.
+
+
+    `curl -X POST 'https://api.factorialhr.com/oauth/token' -d
+    'client_id=&client_secret=&code=&grant_type=authorization_code&redirect_uri='`
+
+
+    YOUR_CLIENT_ID: OAuth2 Application Id  
+
+    YOUR_CLIENT_SECRET: OAuth2 Application Secret  
+
+    AUTHORIZATION_CODE: OAuth2 CODE  
+
+    REDIRECT_URI: OAuth2 Redirect URL
+
+
+    > You can generate only one OAuth2 token per Code, that means that if you
+    want to generate a new token for a Code that already have one you should
+    refresh your token.
+
+
+    Every time a new token is generated a refresh token is generated as well, so
+    that you can use it on the OAuth2 Refresh Token, and an expire date is also
+    provided.
+
+
+    ### OAuth2 Refresh Token
+
+
+    You can generate a new token under the same Code with a new expire date (you
+    can do it as many times as you need). A refresh token is also returned here
+    so that you can use it on the OAuth2 Refresh Token again.
+
+
+    `curl -X POST 'https://api.factorialhr.com/oauth/token' -d
+    'client_id=&client_secret=&refresh_token=&grant_type=refresh_token'`
+
+
+    YOUR_CLIENT_ID: OAuth2 Application Id  
+
+    YOUR_CLIENT_SECRET: OAuth2 Application Secret  
+
+    REFRESH_TOKEN: OAuth2 Refresh Token
+
+
+    ### OAuth2 Token Usage
+
+
+    The generated token is the credential for performing authenticated requests
+    to Factorial. This token should be included in the Authorization header
+    prefixed with the word Bearer and a separating space.  
+
+    As an example, if your token is `12345` then the header content should be
+    `Bearer 12345`.
+
+
+    ### Maintaining a persistent connection
+
+
+    To maintain a persistent connection, you should not let the token expire.
+    You can avoid this by simply refreshing your token before the expiration
+    date. This will give you another token with a new expiration date, before
+    that token expires you should refresh it again, and so on...  
+
+    If you want to do this automatically, you should provide something in your
+    code that will help you perform the update every time the token expires.
+    Otherwise, you would have to do the update manually and make sure you
+    refresh your token before the expiration date to maintain the connection.
+
+
+    ## ApiKeys
+
+
+    > API keys are used to identify systems, not the individual users that
+    access.
+
+
+    ApiKeys have **TOTAL ACCESS** to everything and never expire. Its the
+    creators responsability to generate them and store them securely.
+
+
+    ### Generation
+
+
+    In the `Core>Keys` section of this documentation you can access the apis for
+    managing this resource.
+
+
+    ### Usage
+
+
+    ApiKeys are a single string of symbols that must be added as a custom header
+    on the request. The header name must be `x-api-key` and the key must be the
+    value without any prefixes.
+
+
+    ### Disclaimer
+
+
+    ApiKey management require full admin permissions as the resource itself
+    allows for full admin access to the entire platform on behalf of the company
+    and not of a user, therefore any operations are not linked to any user in
+    particular.
+
+
+    # Development
+
+
+    ## SDKs
+
+
+    Coming soon
+
+
+    ## Sandbox
+
+
+    A sandbox/demo environment is available for testing integrations via public
+    API calls. Developers can request provisioning with full access to a demo
+    company where to test code before actually interacting with a production
+    environment.
+
+
+    Contact your account manager or account executive to request this
+    environment and get OAuth2 credentials for generating tokens.
+
+
+    Note: the domain for sandbox is different than that from production. Sandbox
+    base domain is `http://api.demo.factorialhr.com`
+
+
+    ## Postman
+
+
+    Click the "Run in Postman" button to open the full list of endpoints on your
+    Postman workspace as a Postman Collection.  
+
+    Inside the collection lookout for the Collection's Variables, configure your
+    variables accordingly.
+
+
+    ### Delegating Token Generation To Postman
+
+
+    Coming soon
+
+
+    # Changelog
+
+
+    Coming soon
+
+
+    # How to...
+
+
+    ## Custom Fields
+
+
+    Custom fields are useful when you want to add some fields that are not the
+    default ones, to every employee of the company.
+
+
+    For that, you have to create via Factorial App the base custom field in
+    order to have all the employees with it. That option is available in
+    customization, inside the company menu
+
+
+    Once you have that, via API, you can [Create a value for a custom
+    field](https://apidoc.factorialhr.com/#72f3f786-e37d-4e80-ada2-0beedd03b171)
+    to each employee. You should know the custom field id in order to make that,
+    you can check it by [getting a collection of custom
+    fields](https://apidoc.factorialhr.com/#f98dae5a-a8d0-474e-a181-7e9603409b42)
+  version: 1.0.0
+servers:
+  - url: http://{{baseurl}}{{prefix}}
+  - url: http://{{baseurl}}
+components:
+  securitySchemes:
+    oauth2Auth:
+      type: http
+      scheme: oauth2
+security:
+  - oauth2Auth: []
+tags:
+  - name: Core
+  - name: Core > Employees
+    description: "Used for managing employees' information. Only\_`admins`\_can see all the employees' information,\_`regular users`\_will get a restricted version of the payload as a response based on the permission set by the admin"
+  - name: Core > Employees > V1
+    description: >-
+      This version contains employees information and also those that are
+      related to the employee such as contracts. So it is data intensive, hard
+      to maintain and not very efficient. This is addressed in version
+      [V2](https://apidoc.factorialhr.com/#575b6e00-1014-42df-809d-85a683aa4d54)
+  - name: Core > Employees > V2
+    description: >-
+      This version contains strictly employees information. Hence it is not data
+      intensive and easy to work with. We recommend using this version as V1
+      will be deprecated with time.
+  - name: Core > Webhooks
+    description: >-
+      > ### 📘
+
+      > 
+
+      > "Knock knock on X outside Factorial when Y happens inside Factorial"
+
+
+      > ### 🚧 Usage
+
+      > 
+
+      > Webhooks can be used directly or via intermediary platforms or services.
+      Using them directly requires technical knowledge.
+
+
+      ## Factorial Webhooks
+
+
+      > ### 🚧 URL
+
+      > 
+
+      > The same URL can be used to get notifications for all events or
+      different ones per event. Notice that if the same url for receiving
+      notifications is used for all events, then distinguishing an event from
+      another might be an issue.
+
+
+      When an event happens inside Factorial, a POST request will be triggered
+      to the associated event URL. If the request fails for any given reason, a
+      retry will be performed shortly after.
+
+
+      ## Payload
+
+
+      Payloads per hook vary. The common factor will always be the id field for
+      the related resource that triggered the webhook. Implementations should
+      avoid relying on other fields.
+
+
+      ## Webhooks Types
+
+
+      | **Type** | **Information** |
+
+      | --- | --- |
+
+      | employee_invited | When creating a new employee, optionally you can send
+      an invitation to create an account in Factorial. If you send an
+      invitation, this event gets triggered. |
+
+      | employee_created | When creating a new employee, after submitting the
+      form, this event gets triggered. |
+
+      | employee_terminated | When terminating an employee, after submitting the
+      form, this event gets triggered |
+
+      | employee_unterminated | When un terminating an employee, after
+      submitting the form, this event gets triggered |
+
+      | attendance_clockin | When the user clocks in and starts the timer, this
+      event is triggered. |
+
+      | attendance_clockout | When the user clocks out and stops the timer, this
+      event is triggered |
+
+      | ats_application_created | When a candidate applies for a posting. |
+
+      | ats_application_updated | When a candidates application for a posting
+      suffers changes. |
+
+      | ats_job_posting_created | When a job posting is created. |
+
+      | ats_job_posting_updated | When a job posting is updated. |
+
+      | ats_job_posting_deleted | When a job posting is deleted. |
+
+      | timeoff_leave_created | When a Timeoff Leave is created. |
+
+      | timeoff_leave_updated | When a Timeoff Leave suffers any changes. |
+
+      | timeoff_leave_approved | When a Timeoff Leave is explicitly approved. |
+
+      | document_created | When a document is created. |
+  - name: Core > Custom Fields
+  - name: Core > Files
+  - name: Core > Files > Documents
+    description: >-
+      ###### **What does it do?**
+
+
+      This endpoints will allow you to create, update retrieve or delete
+      documents for the company or an employee. You are also going to be able to
+      request e-signatures from employees
+
+
+      ###### **Is it related to other entities?**
+
+
+      Documents are going to be created under you company, but also can be
+      assign to an employee.
+
+
+      ###### **Who can use it?**
+
+
+      Only admins are able to create documents.
+  - name: Core > Files > Folders
+    description: >-
+      ###### **What does it do?**
+
+
+      This endpoints will allow you to create, update or retrieve folders
+
+
+      ###### **Is it related to other entities?**
+
+
+      Once you create folder you are going to be able to store documents inside
+      them.
+
+
+      ###### **Who can use it?**
+
+
+      Everyone can create folders
+  - name: Core > Location
+  - name: Core > Holidays
+  - name: Core > Legal Entities
+  - name: Core > Keys
+    description: "> API keys are used to identify systems, not the individual users that access.\n\nKeys give total access to the Factorial platform and the operations performed with such are not linked/associated to any user in particular. Therefore their management and storage must be done with extreme caution.\n\nUnlike OAuth2 tokens, Keys dont have a TTL and therefore dont require regenerating the key. As long as the key is not deleted, it will keep working indefinitly.\n\nFor security reasons, when creating a key the code that is generated will only be displayed on the response of the creation. Administrators should copy and safely store such Key as it cant be recovered later. Listing keys will only show a hashed version of the key.\n\n### Usage\n\nApiKeys are a single string of symbols that must be added as a custom header on the request. The header name must be\_`x-api-key`\_and the key must be the value without any prefixes.\n\nIf a request is received with both oauth token and apikey, the api key will overrule the oauth as it has broader permissions.\n\n### Disclaimer\n\nApiKey management require full admin permissions as the resource itself allows for full admin access to the entire platform on behalf of the company and not of a user."
+paths:
+  /v1/employees:
+    get:
+      tags:
+        - Core > Employees > V1
+      summary: Get employees from a company
+      description: >-
+        Only `admins` can see all the employees' information, `regular users`
+        will get a restricted version of the payload as a response based on the
+        permission set by the admin
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Tue, 19 Apr 2022 15:08:13 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Access-Control-Allow-Credentials:
+              schema:
+                type: boolean
+                example: 'true'
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  access-token,expiry,token-type,uid,client,x-amzn-trace-id,x-factorial-node,sentry-trace
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding,Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: e89556ef-586a-4c99-a0e1-18eb934c9657
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/employees#index
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  s8mb8lfktiemh82g2ubz,qlsynckleyb0vk6j1hve,kqe3kurlivxoboipqg2o,fs0jpvk5rzumjqbbt1kf,mq3oz00eau9vhbs6rzjr,fncea9zcek1szsmbbcy3,dpajhr6btbw6a8ygawxk
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '2.790984'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - id: 5
+                  birthday_on: '1985-11-23'
+                  manager_id: null
+                  terminated_on: null
+                  timeoff_manager_id: null
+                  regular_access_starts_on: '2021-09-20'
+                  avatar: >-
+                    https://api.factorialhr.com/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0f20f2de7f8e2b32397236fd7f3cffd458816d35/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDem9MWm05eWJXRjBTU0lJY0c1bkJqb0dSVlE2QzNKbGMybDZaVWtpRGpFd01GNTRNVEF3WGdZN0JsUTZER2R5WVhacGRIbEpJZ3REWlc1MFpYSUdPd1pVT2d0bGVIUmxiblJKSWd3eE1EQjRNVEF3QmpzR1ZEb1BZbUZqYTJkeWIzVnVaRG9RZEhKaGJuTndZWEpsYm5RNkVHRjFkRzlmYjNKcFpXNTBWQT09IiwiZXhwIjpudWxsLCJwdXIiOiJ2YXJpYXRpb24ifX0=--ccd4e4fc96666ee897b4e6d1223d1ccb3d375689/bob.png
+                  identifier: 27425565C
+                  identifier_type: dni
+                  phone_number: '9322222222222'
+                  gender: male
+                  nationality: es
+                  bank_number: ES40 6223 2843 9724 3255 0455
+                  country: es
+                  city: Barcelona
+                  state: Barcelona
+                  postal_code: '08007'
+                  address_line_1: c/ Tallers 123,
+                  address_line_2: Atic 5
+                  social_security_number: '399845023038'
+                  email: bob@factorial.co
+                  full_name: ANDREA
+                  first_name: ANDREA
+                  last_name: andrea
+                  role: basic
+                  start_date: '2021-09-20'
+                  hiring:
+                    base_compensation_amount_in_cents: 5000000
+                    base_compensation_type: yearly
+                  location_id: 1
+                  team_ids:
+                    - 1
+                  company_holiday_ids:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                - id: 6
+                  birthday_on: '1978-05-20'
+                  manager_id: 5
+                  terminated_on: null
+                  timeoff_manager_id: 5
+                  regular_access_starts_on: '2021-09-20'
+                  avatar: >-
+                    https://api.factorialhr.com/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDQT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--4fc096efb5e963644d891856ae459165794952e0/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDem9MWm05eWJXRjBTU0lJY0c1bkJqb0dSVlE2QzNKbGMybDZaVWtpRGpFd01GNTRNVEF3WGdZN0JsUTZER2R5WVhacGRIbEpJZ3REWlc1MFpYSUdPd1pVT2d0bGVIUmxiblJKSWd3eE1EQjRNVEF3QmpzR1ZEb1BZbUZqYTJkeWIzVnVaRG9RZEhKaGJuTndZWEpsYm5RNkVHRjFkRzlmYjNKcFpXNTBWQT09IiwiZXhwIjpudWxsLCJwdXIiOiJ2YXJpYXRpb24ifX0=--ccd4e4fc96666ee897b4e6d1223d1ccb3d375689/michael
+                  identifier: null
+                  identifier_type: null
+                  phone_number: null
+                  gender: male
+                  nationality: null
+                  bank_number: null
+                  country: es
+                  city: null
+                  state: null
+                  postal_code: null
+                  address_line_1: null
+                  address_line_2: null
+                  social_security_number: null
+                  email: michael@factorial.co
+                  full_name: Michael The Marketing boss
+                  first_name: Michael
+                  last_name: The Marketing boss
+                  role: basic
+                  start_date: '2021-09-20'
+                  hiring:
+                    base_compensation_amount_in_cents: 4000000
+                    base_compensation_type: yearly
+                  location_id: 1
+                  team_ids:
+                    - 1
+                    - 3
+                  company_holiday_ids:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+    post:
+      tags:
+        - Core > Employees > V1
+      summary: Create employee
+      description: Create employee
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email of the Employee to create. (Required)
+                  example: string
+                first_name:
+                  type: string
+                  description: The first name of the Employee to create. (Required)
+                  example: string
+                last_name:
+                  type: string
+                  description: The last name of the Employee to create. (Required)
+                  example: string
+                birthday_on:
+                  type: string
+                  description: The birth date. Format is YYYY-MM-DD
+                  example: YYYY-MM-DD
+                start_date:
+                  type: string
+                  description: The birth date. Format is YYYY-MM-DD
+                  example: YYYY-MM-DD
+                regular_access_starts_on:
+                  type: string
+                  description: The birth date. Format is YYYY-MM-DD
+                  example: YYYY-MM-DD
+                manager_id:
+                  type: string
+                  description: Id of the manager. Must belong to the company.
+                  example: ' int'
+                role:
+                  type: string
+                  description: The role the user has in the company. Can be basic or admin.
+                  example: '[basic, admin]'
+                timeoff_manager_id:
+                  type: string
+                  description: >-
+                    Id of the timeoff manager. Must belong to the company. Its
+                    the employee that aprroves timeoff requests.
+                  example: int
+                terminated_on:
+                  type: string
+                  example: YYYY-MM-DD
+                termination_reason:
+                  type: string
+                  example: string
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '201':
+          description: Created
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Tue, 19 Apr 2022 15:18:48 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '681'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Access-Control-Allow-Credentials:
+              schema:
+                type: boolean
+                example: 'true'
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  access-token,expiry,token-type,uid,client,x-amzn-trace-id,x-factorial-node,sentry-trace
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding,Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: 921876fa-1d56-42ad-94e9-eeb8c5ee626e
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/employees#create
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  aqyxe6v71tatbxobda75,qlsynckleyb0vk6j1hve,kqe3kurlivxoboipqg2o,fs0jpvk5rzumjqbbt1kf,mq3oz00eau9vhbs6rzjr,fncea9zcek1szsmbbcy3,dpajhr6btbw6a8ygawxk,s8mb8lfktiemh82g2ubz,6gbrscll16h6zrwg7tfk,k4i9i7ng8wt77n382sd,yrhid3z0qjakdsgj096i,is2vaipz7nsq6vee4hxl
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '2.428576'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 86
+                birthday_on: '1994-07-05'
+                manager_id: 5
+                terminated_on: null
+                timeoff_manager_id: 5
+                regular_access_starts_on: '2022-05-09'
+                avatar: null
+                identifier: null
+                identifier_type: null
+                phone_number: null
+                gender: null
+                nationality: null
+                bank_number: null
+                country: null
+                city: null
+                state: null
+                postal_code: null
+                address_line_1: null
+                address_line_2: null
+                social_security_number: null
+                email: email@email.com
+                full_name: ' Bob  The Boss'
+                first_name: ' Bob'
+                last_name: ' The Boss'
+                role: basic
+                start_date: '2022-05-08'
+                hiring:
+                  base_compensation_amount_in_cents: null
+                  base_compensation_type: null
+                location_id: 1
+                team_ids: []
+                company_holiday_ids:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/employees/{id}:
+    get:
+      tags:
+        - Core > Employees > V1
+      summary: Get employee
+      description: >-
+        Only admins can see all the employees' information, regular users will
+        get a restricted version of the payload as a response based on the
+        permission set by the admin
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: '(Required) '
+          example: '3'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Tue, 19 Apr 2022 15:20:17 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '1384'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Access-Control-Allow-Credentials:
+              schema:
+                type: boolean
+                example: 'true'
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: >-
+                  access-token,expiry,token-type,uid,client,x-amzn-trace-id,x-factorial-node,sentry-trace
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding,Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: 566e559b-c55e-4444-bd9a-6f24163dda3c
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/employees#show
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  xmmtfdfq0rqfrjtm3qbu,qlsynckleyb0vk6j1hve,kqe3kurlivxoboipqg2o,fs0jpvk5rzumjqbbt1kf,mq3oz00eau9vhbs6rzjr,fncea9zcek1szsmbbcy3,dpajhr6btbw6a8ygawxk,s8mb8lfktiemh82g2ubz,6gbrscll16h6zrwg7tfk,k4i9i7ng8wt77n382sd,yrhid3z0qjakdsgj096i,is2vaipz7nsq6vee4hxl,aqyxe6v71tatbxobda75
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.336898'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 5
+                birthday_on: '1985-11-23'
+                manager_id: null
+                terminated_on: null
+                timeoff_manager_id: null
+                regular_access_starts_on: '2021-09-20'
+                avatar: >-
+                  https://api.factorialhr.com/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBCdz09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0f20f2de7f8e2b32397236fd7f3cffd458816d35/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDem9MWm05eWJXRjBTU0lJY0c1bkJqb0dSVlE2QzNKbGMybDZaVWtpRGpFd01GNTRNVEF3WGdZN0JsUTZER2R5WVhacGRIbEpJZ3REWlc1MFpYSUdPd1pVT2d0bGVIUmxiblJKSWd3eE1EQjRNVEF3QmpzR1ZEb1BZbUZqYTJkeWIzVnVaRG9RZEhKaGJuTndZWEpsYm5RNkVHRjFkRzlmYjNKcFpXNTBWQT09IiwiZXhwIjpudWxsLCJwdXIiOiJ2YXJpYXRpb24ifX0=--ccd4e4fc96666ee897b4e6d1223d1ccb3d375689/bob.png
+                identifier: 27425565C
+                identifier_type: dni
+                phone_number: '9322222222222'
+                gender: male
+                nationality: es
+                bank_number: ES40 6223 2843 9724 3255 0455
+                country: es
+                city: Barcelona
+                state: Barcelona
+                postal_code: '08007'
+                address_line_1: c/ Tallers 123,
+                address_line_2: Atic 5
+                social_security_number: '399845023038'
+                email: bob@factorial.co
+                full_name: ANDREA <string>
+                first_name: ANDREA
+                last_name: <string>
+                role: basic
+                start_date: '2021-09-20'
+                hiring:
+                  base_compensation_amount_in_cents: 5000000
+                  base_compensation_type: yearly
+                location_id: 1
+                team_ids:
+                  - 1
+                company_holiday_ids:
+                  - 1
+                  - 2
+                  - 3
+                  - 4
+                  - 5
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+    put:
+      tags:
+        - Core > Employees > V1
+      summary: Update employee
+      description: Update employee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                birthday_on: '1951-05-19'
+                first_name: <string>
+                last_name: <string>
+                manager_id: -48088753
+                role: admin
+                timeoff_manager_id: -91673232
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "id": -54555705,
+                 "birthday_on": "2015-08-30",
+                 "start_date": "2009-04-02",
+                 "regular_access_starts_on": "2020-03-22",
+                 "full_name": "<string>",
+                 "manager_id": -7974901,
+                 "role": "<string>",
+                 "timeoff_manager_id": 99784928,
+                 "terminated_on": "1949-01-19",
+                 "phone_number": "<string>",
+                 "gender": "female",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "social_security_number": "<string>",
+                 "company_holidays_ids": [
+                  -73776480,
+                  6932769
+                 ],
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "hiring": {
+                  "base_compensation_amount_in_cents": -85533076,
+                  "base_compensation_type": "<string>"
+                 },
+                 "location_id": -39829161,
+                 "team_ids": [
+                  -199134,
+                  -75984535
+                 ],
+                 "avatar": "<string>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/employees/{id}/terminate:
+    post:
+      tags:
+        - Core > Employees > V1
+      summary: Terminate employee
+      description: Terminate employee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                terminated_on: '1992-05-02'
+                termination_reason: <string>
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "id": -54555705,
+                 "birthday_on": "2015-08-30",
+                 "start_date": "2009-04-02",
+                 "regular_access_starts_on": "2020-03-22",
+                 "full_name": "<string>",
+                 "manager_id": -7974901,
+                 "role": "<string>",
+                 "timeoff_manager_id": 99784928,
+                 "terminated_on": "1949-01-19",
+                 "phone_number": "<string>",
+                 "gender": "female",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "social_security_number": "<string>",
+                 "company_holidays_ids": [
+                  -73776480,
+                  6932769
+                 ],
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "hiring": {
+                  "base_compensation_amount_in_cents": -85533076,
+                  "base_compensation_type": "<string>"
+                 },
+                 "location_id": -39829161,
+                 "team_ids": [
+                  -199134,
+                  -75984535
+                 ],
+                 "avatar": "<string>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/employees/{id}/unterminate:
+    post:
+      tags:
+        - Core > Employees > V1
+      summary: Unterminate employee
+      description: Unterminate employee
+      requestBody:
+        content: {}
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "id": -54555705,
+                 "birthday_on": "2015-08-30",
+                 "start_date": "2009-04-02",
+                 "regular_access_starts_on": "2020-03-22",
+                 "full_name": "<string>",
+                 "manager_id": -7974901,
+                 "role": "<string>",
+                 "timeoff_manager_id": 99784928,
+                 "terminated_on": "1949-01-19",
+                 "phone_number": "<string>",
+                 "gender": "female",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "social_security_number": "<string>",
+                 "company_holidays_ids": [
+                  -73776480,
+                  6932769
+                 ],
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "hiring": {
+                  "base_compensation_amount_in_cents": -85533076,
+                  "base_compensation_type": "<string>"
+                 },
+                 "location_id": -39829161,
+                 "team_ids": [
+                  -199134,
+                  -75984535
+                 ],
+                 "avatar": "<string>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v2/core/employees:
+    get:
+      tags:
+        - Core > Employees > V2
+      summary: Get employees from a company
+      description: >-
+        Only `admins` can see all the employees' information, `regular users`
+        will get a restricted version of the payload as a response based on the
+        permission set by the admin
+      parameters:
+        - name: full_text_name
+          in: query
+          schema:
+            type: string
+          description: Retrieves the list of employees by full names
+          example: <string>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                 "id": "<integer>", 
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "birthday_on": "yyyy-mm-dd",
+                 "full_name": "<string>",
+                 "role": "basic or admin",
+                 "terminated_on": "yyyy-mm-dd",
+                 "gender": "female or male",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "swift_bic": "<string>",
+                 "company_id": "<integer>",
+                 "legal_entity_id": "<string>",
+                 "created_at": "yyyy-mm-dd",
+                 "updated_at": "yyyy-mm-dd",
+                 "manager_id": "<integer>",
+                 "timeoff_manager_id": "<integer>",
+                 "timeoff_policy_id": "<integer>"
+                 },
+                 {
+                 "id": "<integer>", 
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "birthday_on": "yyyy-mm-dd",
+                 "full_name": "<string>",
+                 "role": "basic or admin",
+                 "terminated_on": "yyyy-mm-dd",
+                 "gender": "female or male",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "swift_bic": "<string>",
+                 "company_id": "<integer>",
+                 "legal_entity_id": "<string>",
+                 "created_at": "yyyy-mm-dd",
+                 "updated_at": "yyyy-mm-dd",
+                 "manager_id": "<integer>",
+                 "timeoff_manager_id": "<integer>",
+                  "timeoff_policy_id": "<integer>"
+                 }
+                ]
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+    post:
+      tags:
+        - Core > Employees > V2
+      summary: Create employee
+      description: Create employee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: <string>
+                first_name: <string>
+                last_name: <string>
+                birthday_on: yyyy-mm-dd
+                role: basic or admin
+                terminated_on: '1949-01-19'
+                gender: female or male
+                nationality: <string>
+                bank_number: <string>
+                country: <string>
+                city: <string>
+                state: <string>
+                postal_code: <string>
+                address_line_1: <string>
+                address_line_2: <string>
+                identifier: <string>
+                swift_bic: <string>
+                company_id: <integer>
+                legal_entity_id: <string>
+                manager_id: <integer>
+                timeoff_manager_id: <integer>
+      security:
+        - oauth2Auth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": "<integer>", 
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "birthday_on": "yyyy-mm-dd",
+                 "full_name": "<string>",
+                 "role": "basic or admin",
+                 "terminated_on": "yyyy-mm-dd",
+                 "gender": "female or male",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "swift_bic": "<string>",
+                 "company_id": "<integer>",
+                 "legal_entity_id": "<string>",
+                 "created_at": "yyyy-mm-dd",
+                 "updated_at": "yyyy-mm-dd",
+                 "manager_id": "<integer>",
+                 "timeoff_manager_id": "<integer>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v2/core/employees/{id}:
+    get:
+      tags:
+        - Core > Employees > V2
+      summary: Get employee
+      description: >-
+        Only admins can see all the employees' information, regular users will
+        get a restricted version of the payload as a response based on the
+        permission set by the admin
+      security:
+        - oauth2Auth: []
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: <integer>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": "<integer>", 
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "birthday_on": "yyyy-mm-dd",
+                 "full_name": "<string>",
+                 "role": "basic or admin",
+                 "terminated_on": "yyyy-mm-dd",
+                 "gender": "female or male",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "swift_bic": "<string>",
+                 "company_id": "<integer>",
+                 "legal_entity_id": "<string>",
+                 "created_at": "yyyy-mm-dd",
+                 "updated_at": "yyyy-mm-dd",
+                  "manager_id": "<integer>",
+                 "timeoff_manager_id": "<integer>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+    put:
+      tags:
+        - Core > Employees > V2
+      summary: Update employee
+      description: Update employee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: <string>
+                first_name: <string>
+                last_name: <string>
+                birthday_on: yyyy-mm-dd
+                role: basic or admin
+                terminated_on: '1949-01-19'
+                gender: female or male
+                nationality: <string>
+                bank_number: <string>
+                country: <string>
+                city: <string>
+                state: <string>
+                postal_code: <string>
+                address_line_1: <string>
+                address_line_2: <string>
+                identifier: <string>
+                swift_bic: <string>
+                company_id: <integer>
+                legal_entity_id: <string>
+                manager_id: <integer>
+                timeoff_manager_id: <integer>
+      security:
+        - oauth2Auth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: <integer>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": "<integer>", 
+                 "email": "<string>",
+                 "first_name": "<string>",
+                 "last_name": "<string>",
+                 "birthday_on": "yyyy-mm-dd",
+                 "full_name": "<string>",
+                 "role": "basic or admin",
+                 "terminated_on": "yyyy-mm-dd",
+                 "gender": "female or male",
+                 "nationality": "<string>",
+                 "bank_number": "<string>",
+                 "country": "<string>",
+                 "city": "<string>",
+                 "state": "<string>",
+                 "postal_code": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "identifier": "<string>",
+                 "identifier_type": "<string>",
+                 "swift_bic": "<string>",
+                 "company_id": "<integer>",
+                 "legal_entity_id": "<string>",
+                 "created_at": "yyyy-mm-dd",
+                 "updated_at": "yyyy-mm-dd"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/core/webhooks:
+    get:
+      tags:
+        - Core > Webhooks
+      summary: Get list of Webhooks
+      description: Get a list of all subscribed webhooks for current user.
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "type": "<string>"
+                 },
+                 {
+                  "type": "<string>"
+                 }
+                ]
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+    post:
+      tags:
+        - Core > Webhooks
+      summary: Create Webhook
+      description: >-
+        Creates a subscription for a determined webhook type. If webhook already
+        exists, it just changes the target_url.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                type: employee_created
+                target_url: https://test.com
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "type": "<string>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+    delete:
+      tags:
+        - Core > Webhooks
+      summary: Delete Webhook
+      description: >-
+        Deletes a subscription to a webhook. We won't need the webhook id, but
+        its `type`
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "type": "<string>"
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/custom_fields:
+    get:
+      tags:
+        - Core > Custom Fields
+      summary: Get a collection of custom fields
+      description: >-
+        This endpoint allows you to fetch a collection of custom fields. The
+        fields you receive in the response are governed by the `field_group` you
+        supply in the body of your request.
+
+
+        For now, there are 2 acceptable field groups:
+
+
+        *   `employees-questions` which refers to fields relating to an employee
+            
+
+        *   `time-tracking-projects` which refers to fields relating to time
+        tracking data
+      parameters:
+        - name: field_group
+          in: query
+          schema:
+            type: string
+          description: >-
+            (Required) (Required) Available options: <br />employees-questions
+            (Employee's fields)<br />time-tracking-projects (Shift's project)
+          example: <string>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": -7504756,
+                  "label": "<string>",
+                  "position": 90773647,
+                  "required": false,
+                  "field_type": "<string>",
+                  "min_value": -439653,
+                  "max_value": 47114499,
+                  "choice_options": [
+                   "<string>",
+                   "<string>"
+                  ]
+                 },
+                 {
+                  "id": 59171211,
+                  "label": "<string>",
+                  "position": -12726256,
+                  "required": true,
+                  "field_type": "<string>",
+                  "min_value": -74117090,
+                  "max_value": 70332911,
+                  "choice_options": [
+                   "<string>",
+                   "<string>"
+                  ]
+                 }
+                ]
+  /v1/custom_fields/values:
+    get:
+      tags:
+        - Core > Custom Fields
+      summary: Given a custom field, get the value for a specific instance.
+      description: Given a custom field, get the value for a specific instance.
+      parameters:
+        - name: field_id
+          in: query
+          schema:
+            type: string
+          description: '(Required) '
+          example: <string>
+        - name: instance_id
+          in: query
+          schema:
+            type: string
+          description: >-
+            (Required) Id of the model instance associated to the field <br
+            />E.g Employee ID
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": -6102521,
+                  "label": "<string>",
+                  "value": "<string>",
+                  "field_id": -27969882,
+                  "required": true,
+                  "instance_id": -40084579
+                 },
+                 {
+                  "id": -8708979,
+                  "label": "<string>",
+                  "value": "<string>",
+                  "field_id": -74295943,
+                  "required": false,
+                  "instance_id": -33766573
+                 }
+                ]
+    post:
+      tags:
+        - Core > Custom Fields
+      summary: Create a value for a custom field
+      description: >-
+        As described, a `Custom Field Value` can be thought of as an
+        answer/response to a `Custom Field` these answers/responses belong to
+        the entity that inputed the values e.g. an employee who answered the
+        t-shirt size question by filling it out in their factorial dashboard.
+
+
+        This endpoint allows you to create values for custom fields. It requires
+        an `instance_id` which refers to the `id` of the entity that owns this
+        `Custom Value` e.g. an Employee for which the `employee_id` will
+        correspond to the `instance_id`. It also requires an `field_id` to
+        reference the `Custom Field` which this value is related to.
+
+
+        You can think of `Custom Fields` and `Custom Values` as questions and
+        answers.
+      requestBody:
+        content: {}
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/x-www-form-urlencoded
+        - name: field_id
+          in: query
+          schema:
+            type: integer
+          description: (Required) The `id` of the field this value belongs to
+          example: '5'
+        - name: instance_id
+          in: query
+          schema:
+            type: integer
+          description: >-
+            (Required) The `id` of the entity that "created" this value e.g. an
+            employee who fills out the answer to a question
+          example: '6'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": 54769528,
+                 "label": "<string>",
+                 "value": "<string>",
+                 "field_id": -56831813,
+                 "required": false,
+                 "instance_id": -87951650
+                }
+  /v1/core/documents:
+    get:
+      tags:
+        - Core > Files > Documents
+      summary: Get a collection of documents
+      description: Get a collection of documents
+      parameters:
+        - name: employee_id
+          in: query
+          schema:
+            type: string
+          description: Filter all documents by the employee_id
+          example: <integer>
+        - name: folder_id
+          in: query
+          schema:
+            type: string
+          description: Filter all documents by folder_id
+          example: <integer>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": -79089469,
+                  "employee_id": 80815656,
+                  "company_id": -96921054,
+                  "folder_id": -52045519,
+                  "file": "<string>",
+                  "filename": "<string>",
+                  "public": true,
+                  "created_at": "1968-05-16",
+                  "updated_at": "1998-12-14"
+                 },
+                 {
+                  "id": 92080447,
+                  "employee_id": 93250408,
+                  "company_id": 14739052,
+                  "folder_id": -82383193,
+                  "file": "<string>",
+                  "filename": "<string>",
+                  "public": true,
+                  "created_at": "2000-06-11",
+                  "updated_at": "2012-11-08"
+                 }
+                ]
+    post:
+      tags:
+        - Core > Files > Documents
+      summary: Create a document
+      description: Create a document
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                employee_id:
+                  type: integer
+                  description: Assign document to an employee Id
+                  example: '504126'
+                folder_id:
+                  type: string
+                  description: Folder ID to include the coument in
+                  example: <integer>
+                request_esignature:
+                  type: string
+                  description: >-
+                    Whether to request e-signature for this document. (Values
+                    0/1)
+                  example: <boolean>
+                filename:
+                  type: string
+                  description: File Name (required)
+                  example: test
+                public:
+                  type: string
+                  description: Whether the file is public (Values 0/1)
+                  example: <boolean>
+                signees:
+                  type: string
+                  description: Signees assign to the document. (Array of ids)
+                  example: '[<integer>]'
+                file:
+                  type: string
+                  description: File to upload (required)
+                  format: binary
+                is_pending_assignment:
+                  type: string
+                  description: Whether the assignment is pending (Values 0/1)
+                  example: <boolean>
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": 60074281,
+                 "employee_id": 1747093,
+                 "company_id": -77668741,
+                 "folder_id": 52562859,
+                 "file": "<string>",
+                 "filename": "<string>",
+                 "public": false,
+                 "created_at": "1956-10-02",
+                 "updated_at": "1947-04-01"
+                }
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 3737558
+                employee_id: 504129
+                company_id: 3
+                folder_id: null
+                url: URL_TO_FILE
+                filename: test
+                public: true
+                created_at: '2022-03-23T08:27:58.000Z'
+                updated_at: '2022-03-23T08:27:58.000Z'
+  /v1/core/documents/{id}:
+    delete:
+      tags:
+        - Core > Files > Documents
+      summary: Delete a document
+      description: Delete a document
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+    get:
+      tags:
+        - Core > Files > Documents
+      summary: Fetch a document
+      description: Fetch a document
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: (Required) ID of the document to fetch
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": 60074281,
+                 "employee_id": 1747093,
+                 "company_id": -77668741,
+                 "folder_id": 52562859,
+                 "file": "<string>",
+                 "filename": "<string>",
+                 "public": false,
+                 "created_at": "1956-10-02",
+                 "updated_at": "1947-04-01"
+                }
+    put:
+      tags:
+        - Core > Files > Documents
+      summary: Update a document
+      description: Update a document
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                public:
+                  type: string
+                  description: Whether the file is public (required)
+                  example: <boolean>
+                employee_id:
+                  type: string
+                  description: Assign document to an employee (Factorial's employee ID)
+                  example: <integer>
+                folder_id:
+                  type: string
+                  description: Folder ID to include the coument in
+                  example: <integer>
+                request_esignature:
+                  type: string
+                  description: Whether to request e-signature for this document
+                  example: <boolean>
+                signees:
+                  type: string
+                  description: 'Signees assign to the document. '
+                  example: '[<integer>]'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": 60074281,
+                 "employee_id": 1747093,
+                 "company_id": -77668741,
+                 "folder_id": 52562859,
+                 "file": "<string>",
+                 "filename": "<string>",
+                 "public": false,
+                 "created_at": "1956-10-02",
+                 "updated_at": "1947-04-01"
+                }
+  /v1/core/folders:
+    get:
+      tags:
+        - Core > Files > Folders
+      summary: Get a collection of folders
+      description: Get a collection of folders
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: filter folders by name
+          example: <string>
+        - name: active
+          in: query
+          schema:
+            type: string
+          description: filter folders by active
+          example: <boolean>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": 65022242,
+                  "company_id": -45178770,
+                  "name": "<string>",
+                  "type": "<string>",
+                  "active": false,
+                  "created_at": "1996-11-10",
+                  "updated_at": "2002-10-04"
+                 },
+                 {
+                  "id": 78038374,
+                  "company_id": 3194629,
+                  "name": "<string>",
+                  "type": "<string>",
+                  "active": false,
+                  "created_at": "1992-09-07",
+                  "updated_at": "2011-09-19"
+                 }
+                ]
+    post:
+      tags:
+        - Core > Files > Folders
+      summary: Create a folder
+      description: Create a folder
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Folder name (required)
+                  example: <string>
+                active:
+                  type: string
+                  description: Whether the folder is active
+                  example: <boolean>
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '201':
+          description: Created
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": -54649090,
+                 "company_id": -65822469,
+                 "name": "<string>",
+                 "type": "<string>",
+                 "active": false,
+                 "created_at": "1987-08-05",
+                 "updated_at": "1995-11-30"
+                }
+  /v1/core/folders/{id}:
+    get:
+      tags:
+        - Core > Files > Folders
+      summary: Fetch a folder
+      description: Fetch a folder
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": -54649090,
+                 "company_id": -65822469,
+                 "name": "<string>",
+                 "type": "<string>",
+                 "active": false,
+                 "created_at": "1987-08-05",
+                 "updated_at": "1995-11-30"
+                }
+    put:
+      tags:
+        - Core > Files > Folders
+      summary: Update a folder
+      description: Update a folder
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Folder name
+                  example: <string>
+                active:
+                  type: string
+                  description: Whether the folder is active
+                  example: <boolean>
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": -54649090,
+                 "company_id": -65822469,
+                 "name": "<string>",
+                 "type": "<string>",
+                 "active": false,
+                 "created_at": "1987-08-05",
+                 "updated_at": "1995-11-30"
+                }
+  /v1/locations:
+    get:
+      tags:
+        - Core > Location
+      summary: Get all locations
+      description: Get all locations
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": -26422878,
+                  "name": "<string>",
+                  "country": "<string>",
+                  "phone_number": "<string>",
+                  "state": "<string>",
+                  "city": "<string>",
+                  "address_line_1": "<string>",
+                  "address_line_2": "<string>",
+                  "postal_code": "<string>",
+                  "timezone": "<string>",
+                  "company_holidays_ids": [
+                   -55849238,
+                   -15781864
+                  ]
+                 },
+                 {
+                  "id": 95390014,
+                  "name": "<string>",
+                  "country": "<string>",
+                  "phone_number": "<string>",
+                  "state": "<string>",
+                  "city": "<string>",
+                  "address_line_1": "<string>",
+                  "address_line_2": "<string>",
+                  "postal_code": "<string>",
+                  "timezone": "<string>",
+                  "company_holidays_ids": [
+                   -27670041,
+                   -73906710
+                  ]
+                 }
+                ]
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/locations/{id}:
+    get:
+      tags:
+        - Core > Location
+      summary: Get location by ID
+      description: Get location by ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": 26665085,
+                 "name": "<string>",
+                 "country": "<string>",
+                 "phone_number": "<string>",
+                 "state": "<string>",
+                 "city": "<string>",
+                 "address_line_1": "<string>",
+                 "address_line_2": "<string>",
+                 "postal_code": "<string>",
+                 "timezone": "<string>",
+                 "company_holidays_ids": [
+                  13869281,
+                  52419828
+                 ]
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/company_holidays:
+    get:
+      tags:
+        - Core > Holidays
+      summary: Get all company holidays
+      description: Get all company holidays
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                [
+                 {
+                  "id": -2152732,
+                  "summary": "<string>",
+                  "description": "<string>",
+                  "date": "1943-12-29",
+                  "half_day": "<string>",
+                  "location_id": 88995299
+                 },
+                 {
+                  "id": -4484646,
+                  "summary": "<string>",
+                  "description": "<string>",
+                  "date": "2006-09-10",
+                  "half_day": "<string>",
+                  "location_id": -5617594
+                 }
+                ]
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/company_holidays/{id}:
+    get:
+      tags:
+        - Core > Holidays
+      summary: Get company holiday by ID
+      description: Get company holiday by ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+          description: '(Required) '
+          example: '-7775231'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "id": -97457373,
+                 "summary": "<string>",
+                 "description": "<string>",
+                 "date": "2001-05-17",
+                 "half_day": "<string>",
+                 "location_id": 4515242
+                }
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                 "errors": [
+                  "<string>",
+                  "<string>"
+                 ]
+                }
+  /v1/core/legal_entities:
+    get:
+      tags:
+        - Core > Legal Entities
+      summary: Get all Legal entities for a company
+      description: Get all Legal entities for a company
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: employee_id
+          in: query
+          schema:
+            type: integer
+          example: '5'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/core/ legal_entities/{id}:
+    get:
+      tags:
+        - Core > Legal Entities
+      summary: Get a legal Entity by ID
+      description: Get a legal Entity by ID
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          description: '(Required) '
+          example: '33961600'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v1/core/keys:
+    get:
+      tags:
+        - Core > Keys
+      summary: List
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Fri, 11 Mar 2022 09:01:06 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '238'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: c47666c8-013b-4ca8-b3f4-4e42c4348f91
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/core/keys#index
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  pupmnltq8kswmx3890v3,a7ofbsnavtpszigzk5ph,gby4l2r3rpl3gzg2srm7,5m939zmdjrndjn3etay8,pkljrr30p5cy3dagco4q,lxcnsk3yptc2v9a5lozb,bjxlbpc3jkpq7k8yzsy1,iy1fscv5kdeg970k9pxp,o47hzjxukah39is8yphn,6fkb8oauii1f3trpszy,5zfjq7fgdn467raugca1,39gorxvgq6pk9etiay9e,tblewfhk1nviicjy1la9,76euzmdank41m782fxtv,eixkr6ab60g6puc6869j,6sztolvdp6wg6m4p2gm0,kjmn34wyegkkji8mfra3,ljq7p4io06tpygmvgfs8,7m63ms2zmtv55b2bmwph,v52s540c80hg5ahsrfjq
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.119015'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - id: 1
+                  name: test 1
+                  token_digest: >-
+                    3b5faade6539********************0b9ec5967eacd53349b2c058b393817ec8
+                - id: 2
+                  name: Fingerprint Device Door 1
+                  token_digest: >-
+                    0e66ecfcd3a7********************9d175ec00b57a3224cf153cd1707ee6635
+    post:
+      tags:
+        - Core > Keys
+      summary: Create
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Fingerprint Device Door 1
+      responses:
+        '201':
+          description: Created
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Fri, 11 Mar 2022 09:01:00 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '118'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: 02dd46ce-43ef-4f50-a197-878fe5c1a4d5
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/core/keys#create
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  a7ofbsnavtpszigzk5ph,gby4l2r3rpl3gzg2srm7,5m939zmdjrndjn3etay8,pkljrr30p5cy3dagco4q,lxcnsk3yptc2v9a5lozb,bjxlbpc3jkpq7k8yzsy1,iy1fscv5kdeg970k9pxp,o47hzjxukah39is8yphn,6fkb8oauii1f3trpszy,5zfjq7fgdn467raugca1,39gorxvgq6pk9etiay9e,tblewfhk1nviicjy1la9,76euzmdank41m782fxtv,eixkr6ab60g6puc6869j,6sztolvdp6wg6m4p2gm0,kjmn34wyegkkji8mfra3,ljq7p4io06tpygmvgfs8,7m63ms2zmtv55b2bmwph,v52s540c80hg5ahsrfjq,wmti6qo14tald3mfb51c
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.415097'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 2
+                name: Fingerprint Device Door 1
+                token: >-
+                  586639642d460073a3234bb4eebbe619a044c94a45be7771f8e1e7e9b1138165
+  /v1/core/keys/{id}:
+    delete:
+      tags:
+        - Core > Keys
+      summary: Delete
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Fri, 11 Mar 2022 09:03:29 GMT
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Amzn-Trace-Id:
+              schema:
+                type: string
+                example: 754282b2-ee34-459d-92e9-8058b29f2652
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/core/keys#destroy
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: >-
+                  r2tzwu9p02pektbvspmd,pupmnltq8kswmx3890v3,a7ofbsnavtpszigzk5ph,gby4l2r3rpl3gzg2srm7,5m939zmdjrndjn3etay8,pkljrr30p5cy3dagco4q,lxcnsk3yptc2v9a5lozb,bjxlbpc3jkpq7k8yzsy1,iy1fscv5kdeg970k9pxp,o47hzjxukah39is8yphn,6fkb8oauii1f3trpszy,5zfjq7fgdn467raugca1,39gorxvgq6pk9etiay9e,tblewfhk1nviicjy1la9,76euzmdank41m782fxtv,eixkr6ab60g6puc6869j,6sztolvdp6wg6m4p2gm0,kjmn34wyegkkji8mfra3,ljq7p4io06tpygmvgfs8,7m63ms2zmtv55b2bmwph
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.426599'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /v1/core/events:
+    get:
+      tags:
+        - Core
+      summary: Get Events
+      description: >-
+        The Factorial Platform generates events for many operations. This
+        endpoint provides the way of retrieving all events triggered. Whenever
+        possible, the ID of the associated resource will be present, else null.
+
+
+        Note: Audit Logs must be enabled on account and the request must be
+        performed with administrative permissions.
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: event_type
+          in: query
+          schema:
+            type: string
+          description: Used to filter for a specific event.
+          example: Contracts::Events::ContractVersionCreated
+        - name: start
+          in: query
+          schema:
+            type: string
+          description: >-
+            For date interval search. Must be used together with 'end'. Example
+            format: '2019-10-12'
+          example: '2019-10-12'
+        - name: end
+          in: query
+          schema:
+            type: string
+          description: >-
+            For date interval search. Must be used together with 'start'.
+            Example format: '2019-10-12'
+          example: '2019-10-12'
+        - name: direction
+          in: query
+          schema:
+            type: string
+          description: 'Possible values backwards/forward. '
+          example: forward
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: Max records. Defaults to 100
+          example: '100'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Mon, 28 Feb 2022 15:01:06 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Transfer-Encoding:
+              schema:
+                type: string
+                example: chunked
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+                example: no-store, must-revalidate, private, max-age=0
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Set-Cookie:
+              schema:
+                type: string
+                example: __profilin=p%3Dt; path=/; secure; HttpOnly; SameSite=Lax
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/core/events#index
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Miniprofiler-Ids:
+              schema:
+                type: string
+                example: pcadr0f82g0yghhkcafn,nk66nrm1ucy9nbx2250m
+            X-Miniprofiler-Original-Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            X-Request-Id:
+              schema:
+                type: string
+                example: da8c6402-1c5f-47b2-8c83-ce1127711924
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.693109'
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-0:
+                  summary: Mixed Event Response
+                  value:
+                    - id: b1d8e916-c4b4-4848-ab89-ed225235386c
+                      type: >-
+                        ApiCore::LegalEntityInteractor::Create::LegalEntityCreated
+                      name: Legal entity created
+                      datetime: '2021-09-20T10:56:05.092Z'
+                      resource_id: 1
+                    - id: 7dd7929f-9911-4f91-9b28-cb4e38bfc3f0
+                      type: >-
+                        Timeoff::AllowanceSnapshotInteractor::Create::TimeoffAllowanceSnapshotCreated
+                      name: New allowance version created
+                      datetime: '2021-09-20T10:56:06.602Z'
+                      resource_id: 1
+                    - id: dfb433a9-1f65-4efa-b8ef-3988e22d89b2
+                      type: Timeoff::PolicyInteractor::Create::TimeoffPolicyCreated
+                      name: Time-off policy created
+                      datetime: '2021-09-20T10:56:06.620Z'
+                      resource_id: 1
+                    - id: 3d90a7d2-3cb9-4c62-bf4a-367d5eaba126
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:07.285Z'
+                      resource_id: 1
+                    - id: 281dbef9-fd2e-44dc-a70c-8ab0afdbcff5
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.449Z'
+                      resource_id: 1
+                    - id: d43c9b2b-739d-4d70-ad7b-0de2c9096007
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:07.508Z'
+                      resource_id: 1
+                    - id: 2457e1e7-11a4-4cf0-adea-beedbb19485c
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.549Z'
+                      resource_id: 2
+                    - id: b571a4ae-c02c-4e2d-8bae-5e45c210c8fc
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:07.574Z'
+                      resource_id: 2
+                    - id: 538013ed-5574-494f-922b-35755c573b55
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.635Z'
+                      resource_id: 3
+                    - id: 7c0fbc1b-3e67-4821-acb2-8be6fe950e1a
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:07.682Z'
+                      resource_id: 2
+                    - id: 57e633bf-a523-4d89-80d3-57fba55c1481
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.718Z'
+                      resource_id: 4
+                    - id: 63b53faa-d656-45ab-bac7-76351b884573
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:07.744Z'
+                      resource_id: 3
+                    - id: 15148c26-516e-44c0-a396-79858882c128
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.799Z'
+                      resource_id: 5
+                    - id: 4ec06e9d-ddbc-4590-96ce-02085d9af7ab
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:07.848Z'
+                      resource_id: 3
+                    - id: 26a0a2fe-74a4-4954-b10d-bb5f029d7753
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.874Z'
+                      resource_id: 6
+                    - id: 387e1e43-2139-4cd5-920f-247fd8601f6c
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:07.900Z'
+                      resource_id: 4
+                    - id: a7c06503-2a42-4a33-be36-73eb65122479
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.937Z'
+                      resource_id: 7
+                    - id: f6034705-f274-4122-8e9c-05bb98e836b6
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:07.987Z'
+                      resource_id: 8
+                    - id: 2a8d816c-743c-4380-9427-b6ea0200952f
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:08.033Z'
+                      resource_id: 4
+                    - id: a9167168-d9c9-4c8b-ad7d-926faa0e72b9
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.066Z'
+                      resource_id: 9
+                    - id: 6f160a07-5911-4db5-9453-b177bad8da18
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.092Z'
+                      resource_id: 5
+                    - id: dc70c58a-864f-4c0f-b05e-bec18d179337
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:08.143Z'
+                      resource_id: 5
+                    - id: d265fa19-33f3-4384-a207-d48f0d429687
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.187Z'
+                      resource_id: 10
+                    - id: 7c1a0b2c-8518-4e31-b0c4-bf6a26cf7865
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.231Z'
+                      resource_id: 6
+                    - id: 17e71be3-925a-4dbd-99a6-ac0e44a72137
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.297Z'
+                      resource_id: 11
+                    - id: 02329e50-de06-4d62-b8bb-f8fc4088b2e7
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.333Z'
+                      resource_id: 12
+                    - id: f4e86594-642b-47e9-a056-fbf104083155
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:08.381Z'
+                      resource_id: 6
+                    - id: 1809f859-4d9e-455d-99f5-6776991938d1
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.416Z'
+                      resource_id: 13
+                    - id: 2fd1d02b-37f2-4920-a44d-4db8229558bb
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.459Z'
+                      resource_id: 7
+                    - id: d226bc10-bb38-4173-88e4-4174db397e79
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.507Z'
+                      resource_id: 14
+                    - id: 96e5e5dd-179c-4d90-bff9-30f4bd86b7f9
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.535Z'
+                      resource_id: 8
+                    - id: 0fdd8050-4cec-43e6-91d5-53c29bd805d0
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.576Z'
+                      resource_id: 15
+                    - id: 39244883-64de-453e-a70c-a29620f1d091
+                      type: >-
+                        Automations::AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:08.612Z'
+                      resource_id: 7
+                    - id: 175ecd8d-7661-46c0-aa18-427a9d76ed66
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.639Z'
+                      resource_id: 16
+                    - id: 85be922f-f8e5-4bf6-b1ba-7761ab6c5e36
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.667Z'
+                      resource_id: 9
+                    - id: 0fa5970f-1fdb-4632-b6b3-6d5f8350afd8
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.707Z'
+                      resource_id: 17
+                    - id: 8d891a64-d36b-4bd9-8751-ca506486eda1
+                      type: >-
+                        Automations::AutomationInteractor::Create::AutomationCreated
+                      name: Automation created
+                      datetime: '2021-09-20T10:56:08.745Z'
+                      resource_id: 10
+                    - id: a5dd7c48-7113-46b2-bae2-27a998813acf
+                      type: Automations::ActionInteractor::Create::ActionCreated
+                      name: Action created
+                      datetime: '2021-09-20T10:56:08.787Z'
+                      resource_id: 18
+                    - id: b7569f4a-8ec9-4226-9736-c28674892f91
+                      type: >-
+                        Bundles::InstallationInteractor::Create::BundlesInstallationCreated
+                      name: Bundles installation created
+                      datetime: '2021-09-20T10:56:08.893Z'
+                      resource_id: 1
+                    - id: b7f88333-6710-409b-9a04-7411bced497f
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:08.948Z'
+                      resource_id: 1
+                    - id: a2af724e-7e6c-41ea-9425-e7471e79fd52
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:08.978Z'
+                      resource_id: 2
+                    - id: edc2396a-9b94-4c75-91ad-086be2ed348a
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.007Z'
+                      resource_id: 3
+                    - id: f88f3267-8507-4363-8990-d168fc428e38
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.054Z'
+                      resource_id: 4
+                    - id: 20ab021c-9536-4f8a-b327-42ef463ac157
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.100Z'
+                      resource_id: 5
+                    - id: 8c7e5f75-cb06-4e77-906b-cdb94c917816
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.129Z'
+                      resource_id: 6
+                    - id: 6c5adef3-b4ad-4096-adff-1fdcf4969173
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.169Z'
+                      resource_id: 7
+                    - id: 2df97681-320b-46a7-9cd8-8fca4bc32fc9
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.213Z'
+                      resource_id: 8
+                    - id: 0d51ea83-560c-404c-a980-c41cc60ed7f2
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.259Z'
+                      resource_id: 9
+                    - id: bd2e8d51-16bf-4655-be1d-0bf9c0c35dfe
+                      type: >-
+                        Bundles::InstallationResourceInteractor::Create::InstallationResourceCreated
+                      name: Installation resource created
+                      datetime: '2021-09-20T10:56:09.288Z'
+                      resource_id: 10
+                    - id: 9620e4f7-a4f0-4705-b6b7-15d2f64a0654
+                      type: >-
+                        Bundles::InstallCompanyDefaults::CompanyDefaultsBundleInstalled
+                      name: Company defaults bundle installed
+                      datetime: '2021-09-20T10:56:09.312Z'
+                      resource_id: null
+                    - id: 15c433fe-1f5f-4fb6-bc04-1e44b2d523fe
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.619Z'
+                      resource_id: 1
+                    - id: d7509f4f-b727-424d-80ba-4205e593fe2f
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.636Z'
+                      resource_id: 1
+                    - id: 57e9c93e-2c2e-49af-b11c-aaa5163f8fea
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.653Z'
+                      resource_id: 1
+                    - id: 987b7ef4-6901-4af8-892b-957070298da0
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.670Z'
+                      resource_id: 1
+                    - id: ba64efb5-06cf-44c6-b450-561400cf70c3
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.687Z'
+                      resource_id: 1
+                    - id: 3b659e1a-b334-4ed2-8729-6d397f4f9b95
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.703Z'
+                      resource_id: 1
+                    - id: c41fa982-5195-4c9e-902d-fcf09ba8e46d
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.717Z'
+                      resource_id: 1
+                    - id: 19452c3c-7a9d-45c7-a6c7-6b9b252b532d
+                      type: Documents::FolderInteractor::Create::FolderCreated
+                      name: Folder created
+                      datetime: '2021-09-20T10:56:09.731Z'
+                      resource_id: 1
+                    - id: a591fbd9-db06-4e4e-893a-4682498f0b15
+                      type: AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:09.833Z'
+                      resource_id: 1
+                    - id: 897ed1db-a5a0-4849-83a3-04d5ed02885d
+                      type: >-
+                        Permissions::CreatePermissionGroupInteractor::PermissionGroupCreated
+                      name: Permission group created
+                      datetime: '2021-09-20T10:56:09.789Z'
+                      resource_id: 1
+                    - id: 62eb3229-d883-471a-b2de-b5a6b4527290
+                      type: AccessGroupInteractor::Create::AccessGroupCreated
+                      name: Access group created
+                      datetime: '2021-09-20T10:56:09.906Z'
+                      resource_id: 2
+                    - id: 0a12e3c5-8279-4ba7-b854-5bb6751aad77
+                      type: >-
+                        Permissions::CreatePermissionGroupInteractor::PermissionGroupCreated
+                      name: Permission group created
+                      datetime: '2021-09-20T10:56:09.895Z'
+                      resource_id: 2
+                    - id: 8c3c77b1-69dd-4b06-a68a-390f1d03f577
+                      type: Posts::GroupInteractor::Create::GroupCreated
+                      name: Community created
+                      datetime: '2021-09-20T10:56:10.017Z'
+                      resource_id: 1
+                    - id: 65fd8f32-94c7-4828-934d-f0e8b7b9cc12
+                      type: Posts::GroupInteractor::Create::GroupCreated
+                      name: Community created
+                      datetime: '2021-09-20T10:56:10.062Z'
+                      resource_id: 2
+                    - id: f12e93c7-fb94-47b2-ad8f-280dac50d007
+                      type: >-
+                        Posts::GroupInteractor::CreateDefaultGroups::DefaultPostsGroupsCreated
+                      name: Default posts groups created
+                      datetime: '2021-09-20T10:56:10.088Z'
+                      resource_id: null
+                    - id: f61632f7-e6f7-46ab-8da0-8a5d14e44f8d
+                      type: ApiCore::CompanyInteractor::Create::CompanyCreated
+                      name: Company created
+                      datetime: '2021-09-20T10:56:06.635Z'
+                      resource_id: 1
+                    - id: 53970b03-bd93-43e3-b97a-fd637d4e6ea9
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:10.664Z'
+                      resource_id: 1
+                    - id: 732198e3-9bea-4893-a14a-c9f31b75e989
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:10.680Z'
+                      resource_id: null
+                    - id: 6496b3a0-2bb7-4f64-b099-812a69885d43
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:10.722Z'
+                      resource_id: 2
+                    - id: 3ee916b4-d07b-4f68-9e17-8062bbd8ee52
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:10.749Z'
+                      resource_id: null
+                    - id: b41c085c-e73b-4337-83c1-343ef0de0858
+                      type: >-
+                        Posts::GroupInteractor::AssignToDefaultGroups::AccessAsignedtoDefaultPostsGroups
+                      name: Access asignedto default posts groups
+                      datetime: '2021-09-20T10:56:10.769Z'
+                      resource_id: null
+                    - id: d1566ddb-db28-4397-bc31-fb9fd10132a8
+                      type: ApiCore::AccessInteractor::Create::AccessCreated
+                      name: Access created
+                      datetime: '2021-09-20T10:56:10.594Z'
+                      resource_id: 20
+                    - id: d2f5d715-0c1a-463a-9711-294be0a7744c
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:11.127Z'
+                      resource_id: 3
+                    - id: d273c01d-8a8c-498c-8e17-a6f4a2706dab
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:11.143Z'
+                      resource_id: null
+                    - id: d80888f5-5f23-4448-8c74-45008c49422e
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:11.170Z'
+                      resource_id: 4
+                    - id: 4d8b464b-2d2e-45a5-9a11-1bd26130b94d
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:11.184Z'
+                      resource_id: null
+                    - id: 58d0018b-17c3-443f-9a3c-694b219bf8e1
+                      type: >-
+                        Posts::GroupInteractor::AssignToDefaultGroups::AccessAsignedtoDefaultPostsGroups
+                      name: Access asignedto default posts groups
+                      datetime: '2021-09-20T10:56:11.203Z'
+                      resource_id: null
+                    - id: 3d6a7824-bccb-49e7-ae91-5e6de2a666fc
+                      type: ApiCore::AccessInteractor::Create::AccessCreated
+                      name: Access created
+                      datetime: '2021-09-20T10:56:11.102Z'
+                      resource_id: 21
+                    - id: 300da4f4-0f13-43f9-9cfa-910e2db3807b
+                      type: >-
+                        Timeoff::EmployeePolicySnapshotInteractor::Create::EmployeePolicySnapshotCreated
+                      name: Employee policy snapshot created
+                      datetime: '2021-09-20T10:56:11.630Z'
+                      resource_id: 1
+                    - id: 0b236c0f-0ae1-43e7-b751-048f3715ccc7
+                      type: ApiCore::EmployeeInteractor::Create::EmployeeCreated
+                      name: Employee created
+                      datetime: '2021-09-20T10:56:11.570Z'
+                      resource_id: 5
+                    - id: 3abcbb70-438d-44ee-9364-f55cd1787d9c
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:11.828Z'
+                      resource_id: 1
+                    - id: e9284454-20f6-4436-b118-1fa2d5c87560
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:12.091Z'
+                      resource_id: 5
+                    - id: b599c881-f8f1-43ce-8a6b-170714a6b5b3
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:12.114Z'
+                      resource_id: null
+                    - id: fc61286b-0ece-4bdf-9dbf-ff920bb68045
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:12.156Z'
+                      resource_id: 6
+                    - id: dd8d0080-9621-4648-81ec-f6c89b69fb65
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:12.175Z'
+                      resource_id: null
+                    - id: bd797446-2bb3-46c3-abe2-2efd7c9423ff
+                      type: >-
+                        Posts::GroupInteractor::AssignToDefaultGroups::AccessAsignedtoDefaultPostsGroups
+                      name: Access asignedto default posts groups
+                      datetime: '2021-09-20T10:56:12.228Z'
+                      resource_id: null
+                    - id: 4437f02f-04fa-466f-bcd0-7db414cbaaa1
+                      type: ApiCore::AccessInteractor::Create::AccessCreated
+                      name: Access created
+                      datetime: '2021-09-20T10:56:12.065Z'
+                      resource_id: 22
+                    - id: b59d64e8-dd20-4d52-8d38-eb8105fdd857
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.288Z'
+                      resource_id: 1
+                    - id: d3b58718-c063-474a-acf5-5ca2737950ac
+                      type: >-
+                        Timeoff::EmployeePolicySnapshotInteractor::Create::EmployeePolicySnapshotCreated
+                      name: Employee policy snapshot created
+                      datetime: '2021-09-20T10:56:12.413Z'
+                      resource_id: 2
+                    - id: 1612158c-deae-4346-bc01-bd684825e53b
+                      type: ApiCore::EmployeeInteractor::Create::EmployeeCreated
+                      name: Employee created
+                      datetime: '2021-09-20T10:56:12.372Z'
+                      resource_id: 6
+                    - id: 2e371b2d-7887-42ac-a78f-73e8fff4a943
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:12.476Z'
+                      resource_id: 2
+                    - id: a88ac2bc-b479-42d3-8369-7957e765469f
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.463Z'
+                      resource_id: 2
+                    - id: 32b29708-4f5d-4780-bc21-6ab33b50d0ed
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.559Z'
+                      resource_id: 3
+                    - id: ade87e83-9e93-4e2c-bd9b-fcd8dffa49d2
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.587Z'
+                      resource_id: 4
+                    - id: 8acd869d-0fac-4cf7-beef-df7cb15c45ef
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.652Z'
+                      resource_id: 5
+                    - id: 4b91ec64-ba41-44d0-8412-87f6942e24db
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:12.747Z'
+                      resource_id: 7
+                    - id: e5c72769-29e4-49c9-a182-48f115fbce32
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:12.771Z'
+                      resource_id: null
+                    - id: bb0e8aad-dbad-48b9-a9f4-5da8957c7316
+                      type: >-
+                        AccessGroupMembershipInteractor::Create::AccessGroupMembershipCreated
+                      name: Employee added to a team
+                      datetime: '2021-09-20T10:56:12.810Z'
+                      resource_id: 8
+                    - id: eb78dcbe-2469-4c97-9490-d3f2aad4660a
+                      type: >-
+                        Posts::GroupInteractor::AddParticipantToGroup::EmployeeAddedtoPostsGroup
+                      name: Employee addedto posts group
+                      datetime: '2021-09-20T10:56:12.824Z'
+                      resource_id: null
+                    - id: ca79b63b-f653-4231-ba4a-365b3a131c21
+                      type: Contracts::Events::SpainEducationLevelCreated
+                      name: Spain education level created
+                      datetime: '2021-09-20T10:56:12.784Z'
+                      resource_id: 6
+                example-1:
+                  summary: Filtering by event type
+                  value:
+                    - id: 3899547e-dfe4-455b-b5dc-44b706fd5765
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2022-02-07T11:44:05.212Z'
+                      resource_id: 71
+                    - id: 837dc3f2-d2db-48f7-811f-be6d2a501768
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-10-01T08:56:43.139Z'
+                      resource_id: 31
+                    - id: 061f0ab0-c313-4a7f-8028-7a1a5774be64
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-10-01T08:56:23.368Z'
+                      resource_id: 30
+                    - id: 239ff66e-a5a9-4dad-b8c7-13e09b5b5fe0
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-10-01T08:15:10.155Z'
+                      resource_id: 29
+                    - id: 1f10ff65-1422-44a0-8f8f-a64d5eed2d9c
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-10-01T08:14:56.409Z'
+                      resource_id: 28
+                    - id: c217909d-1806-4814-b10c-72b7966aa273
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-28T11:28:28.176Z'
+                      resource_id: 27
+                    - id: 56c7ea30-6ecf-4d0c-b8c0-4d410dc12587
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T11:02:26.083Z'
+                      resource_id: 26
+                    - id: 7403f85a-0c19-4903-8fd3-65bd9692249f
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:52:27.912Z'
+                      resource_id: 25
+                    - id: f7cba602-dc26-4470-9b6c-872c945b2205
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:47:52.836Z'
+                      resource_id: 24
+                    - id: df45fa16-b684-493b-958d-ea2b354c9f14
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:44:10.821Z'
+                      resource_id: 23
+                    - id: dae3acd0-b48a-4d09-bbb7-4a9636ca85d4
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:38:20.051Z'
+                      resource_id: 22
+                    - id: ddcfc7b3-e7e2-4c7b-87a1-4b8816f6cc4e
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:22:08.386Z'
+                      resource_id: 21
+                    - id: a7a02899-77f0-41b4-9c70-ee904e8fcee0
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:09:09.955Z'
+                      resource_id: 20
+                    - id: 8dbc6020-b6ab-44da-8c5d-c63996ee5eb1
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T10:08:31.957Z'
+                      resource_id: 19
+                    - id: bae74bf9-6ff6-449d-ad16-569400a80a71
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T09:44:57.352Z'
+                      resource_id: 18
+                    - id: d3bf753a-f885-42d7-9360-3c60faff1458
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T09:36:15.912Z'
+                      resource_id: 17
+                    - id: 986cb300-e143-4b9a-9a69-289c62a5200a
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T09:30:54.877Z'
+                      resource_id: 16
+                    - id: 32468481-1525-49be-8962-4513cea6409c
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-23T09:29:38.765Z'
+                      resource_id: 15
+                    - id: 25893492-8074-40c7-a77e-82cc7b4acd05
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T16:41:57.527Z'
+                      resource_id: 14
+                    - id: 9fc166d0-1ba1-4a71-b27c-d0c48c7b0be4
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T16:35:25.772Z'
+                      resource_id: 13
+                    - id: fe699975-33c4-47a6-8664-032bd16ea207
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T16:10:34.331Z'
+                      resource_id: 12
+                    - id: 900e603f-cebf-442d-82cb-aa15caa61ea5
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T15:43:19.116Z'
+                      resource_id: 11
+                    - id: dfe14e97-2ee7-44b2-ad21-6bf6c6dd5bef
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T15:07:42.577Z'
+                      resource_id: 10
+                    - id: 2ba214e5-431d-480a-af0a-69d4d6036710
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T15:06:16.382Z'
+                      resource_id: 9
+                    - id: 703e8dda-ba96-4fb9-b11e-55fef66b239b
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-22T15:04:52.372Z'
+                      resource_id: 8
+                    - id: d5fcfde4-408c-4dc6-a0c9-f1655d1a665e
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:15.409Z'
+                      resource_id: 7
+                    - id: 2b73697f-17c9-4aa5-9a38-5f351d511e29
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:14.856Z'
+                      resource_id: 6
+                    - id: ae2cd659-8a92-411f-b1f1-8175e469d349
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:14.240Z'
+                      resource_id: 5
+                    - id: e3ff4f6d-3a39-4c4e-88eb-6bb93ca17bcd
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:13.623Z'
+                      resource_id: 4
+                    - id: a30d3de7-25ec-4362-bc51-3a8058440137
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:13.043Z'
+                      resource_id: 3
+                    - id: 2e371b2d-7887-42ac-a78f-73e8fff4a943
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:12.476Z'
+                      resource_id: 2
+                    - id: 3abcbb70-438d-44ee-9364-f55cd1787d9c
+                      type: Contracts::Events::ContractVersionCreated
+                      name: Contract created
+                      datetime: '2021-09-20T10:56:11.828Z'
+                      resource_id: 1
+  /v1/me:
+    get:
+      tags:
+        - Core
+      summary: Get information about current user
+      description: After token grant, get information of the token holder
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: number
+                example: nginx/1.20.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 27 Jan 2022 12:39:59 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json; charset=utf-8
+            Content-Length:
+              schema:
+                type: integer
+                example: '128'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache
+            Etag:
+              schema:
+                type: string
+                example: W/"546045afc1496b3349d71f14a2342321"
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=63072000; includeSubDomains
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Controller-Path:
+              schema:
+                type: string
+                example: api_public/v1/credentials#me
+            X-Factorial-Node:
+              schema:
+                type: string
+                example: NODE_ignacio-cifuentes-dev
+            X-Request-Id:
+              schema:
+                type: string
+                example: 3643b54e-b7e8-4722-b5cd-afcd50fba2f6
+            X-Runtime:
+              schema:
+                type: number
+                example: '0.091405'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |-
+                {
+                    "email": "bob@factorial.co",
+                    "full_name": "Bob The Boss",
+                    "first_name": "Bob",
+                    "last_name": "The Boss",
+                    "employee_id": 5,
+                    "role": "basic"
+                }
